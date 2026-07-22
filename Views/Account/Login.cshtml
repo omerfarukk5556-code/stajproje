@@ -15,10 +15,10 @@
             <h2>Kullanıcı Girişi</h2>
             <form id="loginForm" asp-controller="Account" asp-action="Login" method="post">
                 <input type="hidden" name="actionType" value="login" />
-                <label for="loginUsername"></label>
-                <input type="text" id="loginUsername" name="Username" placeholder="Kullanıcı Adı" required />
-                <label for="loginPassword"></label>
-                <input type="password" id="loginPassword" name="Password" placeholder="Şifre" required />
+                <label for="loginUsername">Kullanıcı Adı</label>
+                <input type="text" id="loginUsername" name="Username" placeholder="Kullanıcı Adı" required aria-label="Kullanıcı Adı" />
+                <label for="loginPassword">Şifre</label>
+                <input type="password" id="loginPassword" name="Password" placeholder="Şifre" required aria-label="Şifre" />
                 <button type="submit" class="btn btn-primary">Giriş Yap</button>
             </form>
             @if (TempData["Error"] != null)
@@ -40,12 +40,12 @@
         <div class="login-box" id="registerBox" style="display: none;">
             <h2>Kayıt Ol</h2>
             <form id="registerForm" asp-controller="Account" asp-action="Login" method="post">
-                <label for="regUsername"></label>
-                <input type="text" id="regUsername" name="Username" placeholder="Kullanıcı Adı" required />
-                <label for="regEmail"></label>
-                <input type="email" id="regEmail" name="Email" placeholder="E-posta" required />
-                <label for="regPassword"></label>
-                <input type="password" id="regPassword" name="Password" placeholder="Şifre" required />
+                <label for="regUsername">Kullanıcı Adı</label>
+                <input type="text" id="regUsername" name="Username" placeholder="Kullanıcı Adı" required aria-label="Kullanıcı Adı" />
+                <label for="regEmail">E-posta</label>
+                <input type="email" id="regEmail" name="Email" placeholder="E-posta" required aria-label="E-posta" />
+                <label for="regPassword">Şifre</label>
+                <input type="password" id="regPassword" name="Password" placeholder="Şifre" required aria-label="Şifre" />
                 
                 <input type="hidden" name="actionType" value="register" />
                 
