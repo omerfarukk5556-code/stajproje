@@ -1,0 +1,647 @@
+﻿@model StajWebProjesi.Models.BatchSelectionViewModel
+<div class="app-shell">
+    <div class="workspace">
+        <div class="control-panel">
+            <h3>Kontrol Merkezi</h3>
+
+            <div class="control-group">
+                <label>Batch ID</label>
+                <div class="d-flex gap-2">
+                    <input id="batchIdInput" type="text" class="form-control" placeholder="Batch ID girin veya seçin" list="batchList" autocomplete="off" />
+                    <button id="btnLoadBatch" class="btn btn-primary btn-sm" style="white-space: nowrap;">Yükle</button>
+                </div>
+                <datalist id="batchList"></datalist>
+            </div>
+
+            <div class="control-group">
+                <label>Grafik Widgetleri</label>
+                <div class="widget-selector">
+                    <div class="form-check">
+                        <input class="form-check-input category-toggle" type="checkbox" value="flow" id="widget_fl" checked />
+                        <label class="form-check-label" for="widget_fl">Akış (FL)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input category-toggle" type="checkbox" value="temp" id="widget_temp" checked />
+                        <label class="form-check-label" for="widget_temp">Sıcaklık (TEMP)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input category-toggle" type="checkbox" value="pressure" id="widget_pressure" checked />
+                        <label class="form-check-label" for="widget_pressure">Basınç (PRESSURE)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input category-toggle" type="checkbox" value="density" id="widget_density" checked />
+                        <label class="form-check-label" for="widget_density">Yoğunluk (DENSITY)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Veri Aralığı</label>
+                <select id="timeRangeSelect" class="form-control">
+                    <option value="daily">Günlük</option>
+                    <option value="monthly">Aylık</option>
+                    <option value="yearly">Yıllık</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Son Kaç?</label>
+                <input id="yearCountInput" type="number" class="form-control" value="1" min="1" max="20" style="width: 80px;" />
+                <small >Örnek: Günlük: Son 1gün, Aylık: Son 1 ay, Yıllık: Son 1 yıl</small>
+            </div>
+
+            <div class="control-group">
+                <label>Tablo Boyutu</label>
+                <div class="d-flex align-items-center gap-2">
+                    <input id="chartHeightSlider" type="range" min="50" max="500" value="170" class="form-range" />
+                    <span id="chartHeightValue">170 px</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="paper-area">
+            <div class="paper-sheet">
+                <!-- Üst Bilgi Şeridi -->
+                <div id="reportHeader" style="display:none; background: #ffc107; padding: 4px 10px; border: 2px solid black; margin-bottom: 4px; border-radius: 2px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #000; font-weight: 600; font-size: 11px;">
+                        <span id="headerBatchId">Batch ID : —</span>
+                        <span id="headerDate">—</span>
+                    </div>
+                </div>
+
+                <div id="widgetGrid" class="widget-grid empty"></div>
+
+                <!-- GSV / Mass Karşılaştırma Tablosu -->
+                <div id="comparisonSection" style="display:none; margin-top: 6px;">
+                    <div style="background: #ffc107; padding: 3px 8px; border: 2px solid black; border-bottom: none; border-radius: 2px 2px 0 0; font-weight: 600; font-size: 10px; color: #000;">
+                        Konşimento / Sayaç Karşılaştırması
+                    </div>
+                    <table id="comparisonTable" style="width: 100%; border-collapse: collapse; border: 2px solid black; font-size: 10px; color: #000;">
+                        <thead>
+                            <tr>
+                                <th style="border: 2px solid black; padding: 3px 6px; background: #fff; width: 50px; color: #000;">Tip</th>
+                                <th style="border: 2px solid black; padding: 3px 6px; background: #d4edda; color: #000;">Konş.</th>
+                                <th style="border: 2px solid black; padding: 3px 6px; background: #d4edda; color: #000;">Sayaç</th>
+                                <th style="border: 2px solid black; padding: 3px 6px; background: #d4edda; color: #000;">Fark %</th>
+                                <th style="border: 2px solid black; padding: 3px 6px; background: #ffe0b2; color: #000;">SahilTank</th>
+                                <th style="border: 2px solid black; padding: 3px 6px; background: #ffe0b2; color: #000;">Fark %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 2px solid black; padding: 3px 6px; font-weight: 600; color: #000;">GSV</td>
+                                <td id="gsvKonsement" style="border: 2px solid black; padding: 3px 6px; background: #e8f5e9; text-align: center; color: #000;">—</td>
+                                <td id="gsvMeter" style="border: 2px solid black; padding: 3px 6px; background: #e8f5e9; text-align: center; color: #000;">—</td>
+                                <td id="gsvDiff" style="border: 2px solid black; padding: 3px 6px; background: #e8f5e9; text-align: center; color: #000;">—</td>
+                                <td id="gsvSahil" style="border: 2px solid black; padding: 3px 6px; background: #fff3e0; text-align: center; color: #000;">—</td>
+                                <td id="gsvSahilDiff" style="border: 2px solid black; padding: 3px 6px; background: #fff3e0; text-align: center; color: #000;">—</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 2px solid black; padding: 3px 6px; font-weight: 600; color: #000;">Mass</td>
+                                <td id="massKonsement" style="border: 2px solid black; padding: 3px 6px; background: #e8f5e9; text-align: center; color: #000;">—</td>
+                                <td id="massMeter" style="border: 2px solid black; padding: 3px 6px; background: #e8f5e9; text-align: center; color: #000;">—</td>
+                                <td id="massDiff" style="border: 2px solid black; padding: 3px 6px; background: #e8f5e9; text-align: center; color: #000;">—</td>
+                                <td id="massSahil" style="border: 2px solid black; padding: 3px 6px; background: #fff3e0; text-align: center; color: #000;">—</td>
+                                <td id="massSahilDiff" style="border: 2px solid black; padding: 3px 6px; background: #fff3e0; text-align: center; color: #000;">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="~/css/charts.css" />
+<style>
+    .summary-table {
+        width: auto;
+        border-collapse: collapse;
+        font-size: 9px;
+        margin-top: 4px;
+    }
+    .summary-table th, .summary-table td {
+        border: 1px solid #ddd;
+        padding: 2px 6px;
+        text-align: center;
+    }
+    .summary-table th {
+        background: #f5f5f5;
+        font-weight: 600;
+    }
+    .editable-title {
+        cursor: pointer;
+        border: 1px dashed transparent;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+    .editable-title:hover {
+        border-color: #999;
+        background: #fafafa;
+    }
+    .chart-card {
+        position: relative;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .widget-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .chart-canvas-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    .editable-title {
+        color: #000 !important;
+    }
+
+    /* Tüm butonlar normal durumu */
+    .btn-primary, .btn-secondary, .btn, #btnLoadBatch,
+    .toolbar-btn, .modal-footer .btn-primary, .modal-footer .btn-secondary {
+        background-color: #c8ff00 !important;
+        border-color: #c8ff00 !important;
+        color: #000 !important;
+    }
+
+    /* Tüm butonlar hover turuncu */
+    .btn-primary:hover, .btn-secondary:hover, .btn:hover, #btnLoadBatch:hover,
+    .toolbar-btn:hover, .modal-footer .btn-primary:hover, .modal-footer .btn-secondary:hover {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+        color: #000 !important;
+    }
+
+    /* Widget checkbox renkleri */
+    .category-toggle:checked {
+        background-color: #c8ff00 !important;
+        border-color: #c8ff00 !important;
+    }
+    .category-toggle:hover {
+        border-color: #ffc107 !important;
+    }
+    .category-toggle:checked:hover {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+    @@media print {
+        .control-panel, #pdfSaveBtn, .toolbar-group .toolbar-btn:not(.toolbar-db) {
+            display: none !important;
+        }
+        .paper-sheet {
+            width: 210mm;
+            padding: 15mm;
+        }
+        .chart-card {
+            page-break-inside: avoid;
+            margin-bottom: 8px;
+        }
+        .chart-card canvas {
+            max-width: 100% !important;
+            max-height: none !important;
+        }
+        .summary-table {
+            page-break-inside: avoid;
+        }
+        #reportHeader, #comparisonSection {
+            page-break-inside: avoid;
+        }
+    }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+
+    // --- Sabit Grafik Grupları ---
+    // Legend sırası: idx 0 = solda, idx son = sağda
+    // overplotting: order ile çizim sırası (yüksek order = altta)
+    const chartGroups = {
+        flow: {
+            title: 'Akış (FL)',
+            columns: ['FL', 'FL1', 'FL2', 'FL3'],
+            colors: ['#0057b8', '#e67e22', '#27ae60', '#8e44ad'],
+            strokeWidths: [4, 3, 2, 1.5]
+        },
+        temp: {
+            title: 'Sıcaklık (TEMP)',
+            columns: ['TEMP_DENS', 'TEMP1', 'TEMP2', 'TEMP3'],
+            colors: ['#c0392b', '#e67e22', '#27ae60', '#8e44ad'],
+            strokeWidths: [4, 3, 2, 1.5]
+        },
+        pressure: {
+            title: 'Basınç (PRESSURE)',
+            columns: ['SKID_INLET_PRESSURE', 'PRES1', 'PRES2', 'PRES3'],
+            colors: ['#c0392b', '#e67e22', '#27ae60', '#8e44ad'],
+            strokeWidths: [4, 3, 2, 1.5]
+        },
+        density: {
+            title: 'Yoğunluk (DENSITY)',
+            columns: ['DENSITY'],
+            colors: ['#2c3e50'],
+            strokeWidths: [4]
+        }
+    };
+
+    let chartInstances = {};
+    let currentChartHeight = 170;
+
+    // --- Element Seçimleri ---
+    const batchIdInput = document.getElementById('batchIdInput');
+    const batchList = document.getElementById('batchList');
+    const widgetGrid = document.getElementById('widgetGrid');
+    const chartHeightSlider = document.getElementById('chartHeightSlider');
+    const chartHeightValue = document.getElementById('chartHeightValue');
+    const reportHeader = document.getElementById('reportHeader');
+    const comparisonSection = document.getElementById('comparisonSection');
+
+    // --- Tablo Boyutu Slider ---
+    chartHeightSlider.addEventListener('input', function () {
+        currentChartHeight = this.value;
+        chartHeightValue.textContent = this.value + ' px';
+        document.querySelectorAll('.chart-canvas-wrapper').forEach(w => {
+            w.style.height = this.value + 'px';
+        });
+        Object.values(chartInstances).forEach(chart => {
+            if (chart) chart.resize();
+        });
+    });
+
+    // --- Widget Checkboxları ---
+    document.querySelectorAll('.category-toggle').forEach(cb => {
+        cb.addEventListener('change', function () {
+            const group = this.value;
+            const card = document.getElementById(`card_${group}`);
+            if (card) {
+                card.style.display = this.checked ? '' : 'none';
+            }
+        });
+    });
+
+    // --- Batch Load Button ---
+    const btnLoadBatch = document.getElementById('btnLoadBatch');
+    if (btnLoadBatch) {
+        btnLoadBatch.addEventListener('click', function () {
+            const val = parseInt(batchIdInput.value);
+            if (!isNaN(val) && val > 0) {
+                sessionStorage.setItem('lastBatchId', batchIdInput.value);
+                loadChartData(val);
+            } else {
+                alert('Lütfen geçerli bir Batch ID girin.');
+            }
+        });
+    }
+
+    batchIdInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            btnLoadBatch.click();
+        }
+    });
+
+    // --- Üst Bilgi Şeridini Güncelle ---
+    function updateReportHeader(batchId) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('tr-TR');
+        document.getElementById('headerBatchId').textContent = `Batch ID : ${batchId}`;
+        document.getElementById('headerDate').textContent = dateStr;
+        reportHeader.style.display = 'block';
+    }
+
+    // --- Batch Listesini Yükle ---
+    async function loadBatches() {
+        try {
+            const response = await fetch('/Data/GetBatches');
+            if (!response.ok) {
+                console.error('GetBatches HTTP hatası:', response.status, response.statusText);
+                return;
+            }
+            const data = await response.json();
+
+            if (data.error) {
+                console.error('Batch yükleme hatası:', data.error);
+                return;
+            }
+
+            if (data.batches) {
+                batchList.innerHTML = '';
+                data.batches.forEach(batch => {
+                    const dateStr = new Date(batch.batchDate).toLocaleString('tr-TR');
+                    const opt = document.createElement('option');
+                    opt.value = batch.batchId;
+                    opt.textContent = `${batch.batchId} - ${batch.shipName} - ${batch.loadType} (${dateStr})`;
+                    batchList.appendChild(opt);
+                });
+
+                if (data.batches.length > 0) {
+                    const savedBatchId = sessionStorage.getItem('lastBatchId');
+                    if (savedBatchId && data.batches.some(b => b.batchId.toString() === savedBatchId)) {
+                        batchIdInput.value = savedBatchId;
+                    } else {
+                        batchIdInput.value = data.batches[0].batchId;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Batch yükleme hatası:', error);
+        }
+    }
+
+    // --- Grafikleri Çiz ---
+    async function loadChartData(batchId) {
+        try {
+            const allColumns = new Set();
+            Object.values(chartGroups).forEach(g => g.columns.forEach(c => allColumns.add(c)));
+            const columnsStr = Array.from(allColumns).join(',');
+            const timeRange = document.getElementById('timeRangeSelect').value;
+            const yearCountInput = document.getElementById('yearCountInput');
+            const yearCount = yearCountInput ? parseInt(yearCountInput.value) || 1 : 1;
+
+            // Grafik verisini yükle
+            const response = await fetch(`/Data/GetHistTrendByBatch?batchId=${batchId}&columns=${columnsStr}&timeRange=${timeRange}&yearCount=${yearCount}`);
+            if (!response.ok) {
+                console.error('GetHistTrendByBatch HTTP hatası:', response.status, response.statusText);
+                return;
+            }
+            const data = await response.json();
+
+            if (data.error) {
+                console.error('Veri hatası:', data.error);
+                return;
+            }
+
+            // GSV/Mass karşılaştırma verisini yükle
+            loadComparisonData(batchId);
+
+            // Üst bilgi şeridini güncelle
+            updateReportHeader(batchId);
+
+            renderAllCharts(data);
+        } catch (error) {
+            console.error('Grafik yükleme hatası:', error);
+        }
+    }
+
+    // --- GSV / Mass Karşılaştırma Verisini Yükle ---
+    async function loadComparisonData(batchId) {
+        try {
+            const response = await fetch(`/Data/GetBatchComparison?batchId=${batchId}`);
+            if (!response.ok) {
+                console.warn('GetBatchComparison HTTP hatası:', response.status);
+                comparisonSection.style.display = 'none';
+                return;
+            }
+            const data = await response.json();
+
+            if (data.error) {
+                console.warn('Karşılaştırma verisi hatası:', data.error);
+                comparisonSection.style.display = 'none';
+                return;
+            }
+
+            comparisonSection.style.display = 'block';
+
+            // GSV satırı - veritabanındaki orijinal string değerleri olduğu gibi göster
+            const gsvKonsStr = data.gsvKonsement || "0";
+            const gsvMeterStr = data.gsvMeter || "0";
+            const gsvKons = parseFloat(gsvKonsStr) || 0;
+            const gsvMeter = parseFloat(gsvMeterStr) || 0;
+            document.getElementById('gsvKonsement').textContent = gsvKonsStr;
+            document.getElementById('gsvMeter').textContent = gsvMeterStr;
+            if (gsvKons !== 0) {
+                const gsvDiff = Math.abs(gsvKons - gsvMeter) / gsvKons * 100;
+                document.getElementById('gsvDiff').textContent = gsvDiff.toFixed(3) + ' %';
+            } else {
+                document.getElementById('gsvDiff').textContent = '—';
+            }
+
+            // Mass satırı - veritabanındaki orijinal string değerleri olduğu gibi göster
+            const massKonsStr = data.massKonsement || "0";
+            const massMeterStr = data.massMeter || "0";
+            const massKons = parseFloat(massKonsStr) || 0;
+            const massMeter = parseFloat(massMeterStr) || 0;
+            document.getElementById('massKonsement').textContent = massKonsStr;
+            document.getElementById('massMeter').textContent = massMeterStr;
+            if (massKons !== 0) {
+                const massDiff = Math.abs(massKons - massMeter) / massKons * 100;
+                document.getElementById('massDiff').textContent = massDiff.toFixed(3) + ' %';
+            } else {
+                document.getElementById('massDiff').textContent = '—';
+            }
+        } catch (error) {
+            console.warn('Karşılaştırma verisi yükleme hatası:', error);
+            comparisonSection.style.display = 'none';
+        }
+    }
+
+    function renderAllCharts(data) {
+        clearCharts();
+        const height = currentChartHeight + 'px';
+
+        Object.entries(chartGroups).forEach(([groupKey, group]) => {
+            const card = document.createElement('section');
+            card.className = 'chart-card';
+            card.id = `card_${groupKey}`;
+            card.style.cssText = 'position: relative; background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 8px 12px 12px 12px; margin-bottom: 4px;';
+            const checkboxId = groupKey === 'flow' ? 'widget_fl' : `widget_${groupKey}`;
+            const checkbox = document.getElementById(checkboxId);
+            card.style.display = checkbox && checkbox.checked ? '' : 'none';
+
+            // Düzenlenebilir Başlık
+            const titleEl = document.createElement('div');
+            titleEl.className = 'editable-title';
+            titleEl.style.cssText = 'position: absolute; top: 4px; left: 6px; font-size: 12px; font-weight: bold; color: #000; background: rgba(255,255,255,0.7); padding: 1px 4px; border-radius: 2px; border: 1px dashed transparent; cursor: pointer; z-index: 5; line-height: 1.2;';
+            titleEl.textContent = group.title;
+            titleEl.addEventListener('dblclick', function () {
+                const self = this;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = self.textContent;
+                input.style.cssText = 'font-size: 13px; font-weight: bold; border: 1px solid #ccc; padding: 2px 6px; width: 180px;';
+                input.addEventListener('blur', function () {
+                    self.textContent = this.value || group.title;
+                    this.replaceWith(self);
+                });
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') this.blur();
+                });
+                this.replaceWith(input);
+                input.focus();
+                input.select();
+            });
+            titleEl.addEventListener('mouseenter', function () {
+                this.style.borderColor = '#999';
+                this.style.background = '#fafafa';
+            });
+            titleEl.addEventListener('mouseleave', function () {
+                if (this.tagName !== 'INPUT') {
+                    this.style.borderColor = 'transparent';
+                    this.style.background = 'rgba(255,255,255,0.9)';
+                }
+            });
+            card.appendChild(titleEl);
+
+            // Canvas Wrapper
+            const canvasWrapper = document.createElement('div');
+            canvasWrapper.className = 'chart-canvas-wrapper';
+            canvasWrapper.style.height = height;
+            canvasWrapper.style.marginBottom = '4px';
+            card.appendChild(canvasWrapper);
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'chart-canvas';
+            canvas.id = `chart_${groupKey}`;
+            canvasWrapper.appendChild(canvas);
+
+            // Özet Tablo (temp ve pressure için)
+            if (groupKey === 'temp' || groupKey === 'pressure') {
+                const summaryTable = document.createElement('table');
+                summaryTable.className = 'summary-table';
+                summaryTable.id = `summary_${groupKey}`;
+                card.appendChild(summaryTable);
+            }
+
+            widgetGrid.appendChild(card);
+
+            // Chart.js ile çizim
+            const ctx = canvas.getContext('2d');
+            const datasets = [];
+            let availableCols = [];
+
+            // LEGEND SIRALAMASI:
+            // Chart.js'de legend, datasets array'indeki sırayla gösterilir.
+            // Legend'da soldan sağa: FL(0), FL1(1), FL2(2), FL3(3) olması için
+            // datasets'leri idx sırasına göre (artan) ekliyoruz.
+            // OVERPLOTTING (z-order): 'order' property ile ayarlanır.
+            // Yüksek order = altta çizilir, düşük order = üstte çizilir.
+            // Yani idx 0 (FL, 4px kalın) → order yüksek (alta), idx son (FL3, 1.5px ince) → order 0 (üste).
+            const totalCols = group.columns.length;
+            group.columns.forEach((col, idx) => {
+                if (data.series && data.series[col] && data.series[col].length > 0) {
+                    availableCols.push(col);
+                    datasets.push({
+                        label: col,
+                        data: data.series[col],
+                        borderColor: group.colors[idx] || '#333',
+                        tension: 0.15,
+                        pointRadius: 0,
+                        borderWidth: group.strokeWidths[idx] || 2,
+                        order: totalCols - 1 - idx,  // idx 0 → en yüksek order (alta çizilir), idx son → 0 (üste çizilir)
+                        fill: false
+                    });
+                }
+            });
+
+            if (datasets.length > 0) {
+                chartInstances[groupKey] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels || [],
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 200 },
+                        interaction: { mode: 'index', intersect: false },
+                        layout: { padding: { top: 0, right: 0, bottom: 0, left: 0 } },
+                        plugins: { legend: { display: true, position: 'top', labels: { font: { size: 10 }, padding: 6 } } },
+                        scales: {
+                            x: {
+                                offset: false,
+                                ticks: { maxTicksLimit: 50, font: { size: 8 }, autoSkip: true, autoSkipPadding: 4, maxRotation: 90, minRotation: 45, padding: 0 },
+                                grid: { display: true, tickLength: 0, offset: false },
+                                border: { display: true, dash: [] }
+                            },
+                            y: {
+                                ticks: { font: { size: 8 }, padding: 0 },
+                                grid: { display: true },
+                                border: { display: true }
+                            }
+                        }
+                    }
+                });
+
+                if (groupKey === 'temp' || groupKey === 'pressure') {
+                    fillSummaryTable(groupKey, data, availableCols);
+                }
+            } else {
+                canvasWrapper.innerHTML = '<p class="text-muted p-2">Bu grup için veri bulunamadı.</p>';
+            }
+        });
+    }
+
+    function fillSummaryTable(groupKey, data, columns) {
+        const table = document.getElementById(`summary_${groupKey}`);
+        if (!table || columns.length === 0) return;
+
+        let html = '<thead><tr><th style="padding:2px 6px;font-size:9px;">Kolon</th><th style="padding:2px 6px;font-size:9px;">Min</th><th style="padding:2px 6px;font-size:9px;">Maks</th><th style="padding:2px 6px;font-size:9px;">Ort</th><th style="padding:2px 6px;font-size:9px;">Son</th></tr></thead><tbody>';
+        
+        columns.forEach(col => {
+            const values = (data.series[col] || []).filter(v => !isNaN(v));
+            if (values.length === 0) return;
+            
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const avg = values.reduce((a, b) => a + b, 0) / values.length;
+            const last = values[values.length - 1];
+
+            html += `<tr>
+                <td style="padding:2px 6px;font-size:9px;">${col}</td>
+                <td style="padding:2px 6px;font-size:9px;text-align:center;">${min.toFixed(2)}</td>
+                <td style="padding:2px 6px;font-size:9px;text-align:center;">${max.toFixed(2)}</td>
+                <td style="padding:2px 6px;font-size:9px;text-align:center;">${avg.toFixed(2)}</td>
+                <td style="padding:2px 6px;font-size:9px;text-align:center;">${last.toFixed(2)}</td>
+            </tr>`;
+        });
+
+        html += '</tbody>';
+        table.style.cssText = 'width:auto;margin-top:4px;border-collapse:collapse;font-size:9px;';
+        table.innerHTML = html;
+    }
+
+    function clearCharts() {
+        Object.values(chartInstances).forEach(c => c.destroy());
+        chartInstances = {};
+        if (widgetGrid) widgetGrid.innerHTML = '';
+    }
+
+    // --- Event Listeners ---
+    const timeRangeSelect = document.getElementById('timeRangeSelect');
+    if (timeRangeSelect) {
+        timeRangeSelect.addEventListener('change', function() {
+            const currentBatchId = document.getElementById('batchIdInput').value;
+            if (currentBatchId) {
+                loadChartData(currentBatchId);
+            }
+        });
+    }
+
+    const yearCountInput = document.getElementById('yearCountInput');
+    if (yearCountInput) {
+        yearCountInput.addEventListener('change', function() {
+            const currentBatchId = document.getElementById('batchIdInput').value;
+            if (currentBatchId) {
+                loadChartData(currentBatchId);
+            }
+        });
+    }
+
+    // --- Başlat ---
+    await loadBatches();
+
+    // --- Bağlantı Durumunu Göster ---
+    fetch('/Database/GetConnectionStatus')
+        .then(r => r.json())
+        .then(data => {
+            if (!data.connected) {
+                console.log('Veritabanına bağlı değil. Lütfen bağlantı yapın.');
+            }
+        })
+        .catch(() => {});
+});
+</script>

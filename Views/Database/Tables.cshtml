@@ -1,0 +1,22 @@
+@model StajWebProjesi.Models.DbConnectionInfo
+
+@{
+    ViewData["Title"] = "Tablolar";
+    var tables = ViewData["Tables"] as List<string> ?? new List<string>();
+    var selected = (TempData["SelectedTables"] as string ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries);
+}
+
+<h2>Tablolar</h2>
+
+<form asp-action="ManageTables" method="post">
+    <div class="mb-3">
+        @foreach (var t in tables)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="selectedTables" value="@t" id="tbl_@t" @(selected.Contains(t) ? "checked" : "") />
+                <label class="form-check-label" for="tbl_@t">@t</label>
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-success">Seçili Tabloları Yönet</button>
+</form>

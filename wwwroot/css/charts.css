@@ -1,0 +1,64 @@
+.chart-card {
+    position: relative;
+    border: 1px solid #ddd;
+    background: white;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.chart-card.draggable {
+    cursor: move;
+}
+
+.chart-card.resizable {
+    resize: both;
+    overflow: hidden;
+}
+
+.resize-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+    right: 0;
+    cursor: nwse-resize;
+    background: linear-gradient(135deg, transparent 50%, #999 50%);
+    display: none;
+}
+
+.chart-card.resizable .resize-handle {
+    display: block;
+}
+
+.chart-card.dragging {
+    opacity: 0.8;
+    z-index: 1000;
+}
+
+@media print {
+    .control-panel { display: none !important; }
+    .paper-area { width: 100%; margin: 0; }
+    .paper-sheet { width: 100%; height: auto; margin: 0; padding: 10mm; }
+    .chart-card { page-break-inside: avoid; break-inside: avoid; }
+    .resize-handle { display: none !important; }
+    .editable-title { color: #000 !important; visibility: visible !important; opacity: 1 !important; }
+}
+
+/* Grafiğin içinde bulunduğu canvas'ı her zaman kutu genişliğine göre tut */
+.chart-card canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+
+.chart-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-canvas {
+    flex-grow: 1;
+    min-height: 0; 
+    margin-bottom: 20px; 
+}

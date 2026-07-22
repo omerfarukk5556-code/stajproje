@@ -1,0 +1,73 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+</head>
+<body>
+    <div id="loginSection" class="login-section active">
+        
+        
+        
+        <div class="login-box" id="loginBox">
+            <h2>Kullanıcı Girişi</h2>
+            <form id="loginForm" asp-controller="Account" asp-action="Login" method="post">
+                <input type="hidden" name="actionType" value="login" />
+                <input type="text" name="Username" placeholder="Kullanıcı Adı" required />
+                <input type="password" name="Password" placeholder="Şifre" required />
+                <button type="submit" class="btn btn-primary">Giriş Yap</button>
+            </form>
+            @if (TempData["Error"] != null)
+            {
+                <div class="message-box error-message" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: #ffe8e8; color: #c62828; font-size: 0.95rem; text-align: center;">@TempData["Error"]</div>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <div class="message-box success-message" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: #f1fce2; color: #4caf50; font-size: 0.95rem; text-align: center;">@TempData["Success"]</div>
+            }
+            <div style="margin-top: 20px; text-align: center;">
+                <p style="color: #666; font-size: 0.9rem;">Hesabın yok mu? 
+                    <a href="javascript:void(0);" onclick="toggleForms()" style="color: var(--primary);">Kayıt Ol</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Kayıt Formu -->
+        <div class="login-box" id="registerBox" style="display: none;">
+            <h2>Kayıt Ol</h2>
+            <form id="registerForm" asp-controller="Account" asp-action="Login" method="post">
+                <input type="text" name="Username" placeholder="Kullanıcı Adı" required />
+                <input type="email" name="Email" placeholder="E-posta" required />
+                <input type="password" name="Password" placeholder="Şifre" required />
+                
+                
+                <input type="hidden" name="actionType" value="register" />
+                
+                <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+            </form>
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="javascript:void(0);" onclick="toggleForms()" style="color: var(--primary);">Giriş Ekranına Dön</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleForms() {
+            var loginBox = document.getElementById('loginBox');
+            var registerBox = document.getElementById('registerBox');
+            if (loginBox.style.display === 'none') {
+                loginBox.style.display = 'block';
+                registerBox.style.display = 'none';
+            } else {
+                loginBox.style.display = 'none';
+                registerBox.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
