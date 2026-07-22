@@ -193,7 +193,8 @@ C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\rjsmcshtml.dsw
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\scopedcss\bundle\StajWebProjesi.styles.css
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\scopedcss\projectbundle\StajWebProjesi.bundle.scp.css
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\x9bb8p770q-{0}-770wwak1ce-770wwak1ce.gz
+C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\a0umfqgjcs-{0}-5ugrepnqox-5ugrepnqox.gz
+C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\7er3s0y03g-{0}-na10tneprs-na10tneprs.gz
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\s4zm7xkvzu-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\uoye04ekp8-{0}-68u9639gle-68u9639gle.gz
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\rw6iz4uoj2-{0}-xkq21cxgbf-xkq21cxgbf.gz
@@ -269,5 +270,4 @@ C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\refint\StajWeb
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.pdb
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.genruntimeconfig.cache
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\ref\StajWebProjesi.dll
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\a0umfqgjcs-{0}-5ugrepnqox-5ugrepnqox.gz
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\7er3s0y03g-{0}-na10tneprs-na10tneprs.gz
+C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\compressed\x9bb8p770q-{0}-xosxbkqo51-xosxbkqo51.gz

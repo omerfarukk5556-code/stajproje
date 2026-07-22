@@ -60,7 +60,7 @@ body {
     border: 1px solid var(--border);
     border-radius: 5px;
     background-color: #1a1a1a;
-    color: #fff;
+    color: #c8ff00;
     font-size: 1rem;
 }
 
@@ -89,4 +89,21 @@ body {
     color: #ff6b6b;
     font-size: 0.9rem;
     margin-top: 10px;
+}
+
+#registerForm input {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #c8ff00;
+    font-size: 1rem;
+}
+
+input::placeholder {
+    color: #666;
+}
+
+.login-box label {
+    color: #c8ff00;
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using System.Security.Cryptography;
 using System.Text;
-using System.IO;
+using IO = System.IO;
 
 namespace StajWebProjesi.Controllers
 {
@@ -15,8 +15,8 @@ namespace StajWebProjesi.Controllers
             // Proje kök dizinini bul - AppContext.BaseDirectory'den parent'a çıkarak
             string baseDir = AppContext.BaseDirectory;
             // Geliştirme ortamında bin/Debug/netX.0/ altında olabilir, proje köküne çıkalım
-            var dir = new DirectoryInfo(baseDir);
-            while (dir.Parent != null && !File.Exists(Path.Combine(dir.FullName, "stajweb.db")))
+            var dir = new IO.DirectoryInfo(baseDir);
+            while (dir.Parent != null && !IO.File.Exists(Path.Combine(dir.FullName, "stajweb.db")))
             {
                 dir = dir.Parent;
             }
