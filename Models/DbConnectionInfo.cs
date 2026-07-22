@@ -2,8 +2,7 @@ namespace StajWebProjesi.Models;
 
 public class DbConnectionInfo
 {
-    // Provider: "SQLite" or "SqlServer"
-    public string Provider { get; set; } = "SQLite";
+    public string? Provider { get; set; }
 
     // For SQL Server
     public string? Server { get; set; }

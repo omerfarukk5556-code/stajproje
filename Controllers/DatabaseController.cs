@@ -21,7 +21,7 @@ public class DatabaseController : Controller
         try
         {
             var model = JsonSerializer.Deserialize<DbConnectionInfo>(connectionInfo);
-            string dbName = model?.Database;
+            string? dbName = model?.Database;
             if (string.IsNullOrWhiteSpace(dbName))
             {
                 var connStr = HttpContext.Session.GetString("DbConnectionString");
@@ -49,14 +49,14 @@ public class DatabaseController : Controller
     public async Task<IActionResult> Connect(DbConnectionInfo model)
     {
         var tables = new List<string>();
-        string connStr = null;
+        string? connStr = null;
         try
         {
             if (model.Provider == "SqlServer" || model.Provider == "SQLServer")
             {
                 if (!string.IsNullOrWhiteSpace(model.ConnectionString))
                 {
-                    connStr = model.ConnectionString;
+                    connStr = model.ConnectionString ?? string.Empty;
                 }
                 else
                 {
@@ -104,12 +104,13 @@ public class DatabaseController : Controller
             HttpContext.Session.SetString("DbConnectionInfo", json);
             
             // AYRICA gerçek connection string'i de kaydet (DataController.GetConnectionString kullanır)
-            HttpContext.Session.SetString("DbConnectionString", connStr);
+            if (!string.IsNullOrEmpty(connStr))
+                HttpContext.Session.SetString("DbConnectionString", connStr);
         }
         catch { }
 
         // Veritabanı adını connection string'den çıkar (ConnectionString üzerinden bağlantı yapılmışsa)
-        string dbName = model.Database;
+        string? dbName = model.Database;
         if (string.IsNullOrWhiteSpace(dbName))
         {
             // connection string'den Initial Catalog çıkar
@@ -118,6 +119,16 @@ public class DatabaseController : Controller
         }
 
         return Json(new { success = true, tables = tables, database = dbName });
+    }
+
+    [HttpPost]
+    public IActionResult Disconnect()
+    {
+        HttpContext.Session.Remove("DbConnectionInfo");
+        HttpContext.Session.Remove("DbConnectionString");
+        HttpContext.Session.Remove("SelectedTables");
+        HttpContext.Session.Remove("ColumnMappings");
+        return Json(new { success = true });
     }
 
     [HttpPost]

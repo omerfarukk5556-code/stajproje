@@ -4,6 +4,8 @@
     background: white;
     break-inside: avoid;
     page-break-inside: avoid;
+    display: flex;
+    flex-direction: column;
 }
 
 .chart-card.draggable {
@@ -13,6 +15,15 @@
 .chart-card.resizable {
     resize: both;
     overflow: hidden;
+}
+
+.chart-card.resizable .resize-handle {
+    display: block;
+}
+
+.chart-card.dragging {
+    opacity: 0.8;
+    z-index: 1000;
 }
 
 .resize-handle {
@@ -26,13 +37,17 @@
     display: none;
 }
 
-.chart-card.resizable .resize-handle {
-    display: block;
+/* Grafiğin içinde bulunduğu canvas'ı her zaman kutu genişliğine göre tut */
+.chart-card canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
 }
 
-.chart-card.dragging {
-    opacity: 0.8;
-    z-index: 1000;
+.chart-canvas {
+    flex-grow: 1;
+    min-height: 0; 
+    margin-bottom: 0; 
 }
 
 @media print {
@@ -42,23 +57,4 @@
     .chart-card { page-break-inside: avoid; break-inside: avoid; }
     .resize-handle { display: none !important; }
     .editable-title { color: #000 !important; visibility: visible !important; opacity: 1 !important; }
-}
-
-/* Grafiğin içinde bulunduğu canvas'ı her zaman kutu genişliğine göre tut */
-.chart-card canvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
-}
-
-
-.chart-card {
-    display: flex;
-    flex-direction: column;
-}
-
-.chart-canvas {
-    flex-grow: 1;
-    min-height: 0; 
-    margin-bottom: 20px; 
 }

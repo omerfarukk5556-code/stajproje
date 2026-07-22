@@ -1,4 +1,7 @@
+/* ===== Base ===== */
 html {
+  position: relative;
+  min-height: 100%;
   font-size: 14px;
 }
 
@@ -6,15 +9,6 @@ html {
   html {
     font-size: 16px;
   }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #c8ff00;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
 }
 
 body {
@@ -30,24 +24,8 @@ input {
   font: inherit;
 }
 
-.widget-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.widget-selector .form-check {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.widget-selector .form-check-input {
-  accent-color: #c8ff00;
-}
-
-.widget-selector .form-check-label {
-  color: #c8ff00;
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #c8ff00;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -59,6 +37,7 @@ input {
   text-align: start;
 }
 
+/* ===== App Shell & Layout ===== */
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -66,6 +45,13 @@ input {
   padding: 20px;
 }
 
+.workspace {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* ===== Toolbar ===== */
 .top-toolbar {
   display: flex;
   justify-content: space-between;
@@ -109,12 +95,7 @@ input {
   border: 1px solid #ffc107;
 }
 
-.workspace {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-
+/* ===== Control Panel ===== */
 .control-panel {
   width: 240px;
   background: #0a0a0a;
@@ -122,6 +103,7 @@ input {
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 0 0 1px #c8ff00 inset;
+  overflow: visible;
 }
 
 .control-panel h3 {
@@ -135,6 +117,7 @@ input {
   display: flex;
   flex-direction: column;
   margin-bottom: 12px;
+  position: relative;
 }
 
 .control-group label {
@@ -143,7 +126,8 @@ input {
   color: #c8ff00;
 }
 
-.control-group input {
+.control-group input,
+.control-group select {
   border: 1px solid #c8ff00;
   border-radius: 8px;
   padding: 8px;
@@ -151,6 +135,33 @@ input {
   color: #c8ff00;
 }
 
+.control-group select option {
+  background: #1a1a1a;
+  color: #c8ff00;
+}
+
+/* ===== Widget Selector ===== */
+.widget-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.widget-selector .form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.widget-selector .form-check-input {
+  accent-color: #c8ff00;
+}
+
+.widget-selector .form-check-label {
+  color: #c8ff00;
+}
+
+/* ===== Paper Area ===== */
 .paper-area {
   flex: 1;
   display: flex;
@@ -160,25 +171,21 @@ input {
 
 .paper-sheet {
   width: 794px;
-  height: 1123px;
+  min-height: 1123px;
   max-width: 100%;
   background: #ffffff;
   border: 1px solid #111;
   border-radius: 8px;
   box-shadow: none;
-  padding: 24px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  overflow: hidden;
+  gap: 4px;
+  overflow: auto;
 }
 
-
-
-/* Ensure inner charts scale and don't overflow */
 .paper-sheet .widget-grid {
-  max-height: 100%;
-  overflow: hidden;
+  overflow: visible;
   display: grid;
 }
 
@@ -193,137 +200,10 @@ input {
   width: 100% !important;
 }
 
-@media print {
-  .paper-sheet {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    padding: 12mm !important;
-  }
-  .chart-card {
-    page-break-inside: avoid;
-  }
-}
-
-.chart-canvas {
-  height: auto !important;
-}
-
-@media print {
-  @page { size: A4 portrait; margin: 5mm; }
-  html, body {
-    width: 210mm !important;
-    min-height: 297mm !important;
-    height: 297mm !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-    color: black !important;
-    overflow: visible !important;
-  }
-  .paper-sheet {
-    background: white !important;
-    color: black !important;
-    border: 1px solid #000 !important;
-    box-shadow: none !important;
-    width: 210mm !important;
-    min-height: 297mm !important;
-    max-height: 297mm !important;
-    height: auto !important;
-    padding: 6mm !important;
-    box-sizing: border-box !important;
-  }
-  .widget-grid {
-    display: block !important;
-    grid-template-columns: 1fr !important;
-    grid-auto-flow: row !important;
-    gap: 6px !important;
-  }
-  .widget-grid > .chart-card {
-    display: block !important;
-    width: 100% !important;
-  }
-  .chart-card {
-    background: white !important;
-    border: 1px solid #000 !important;
-    box-shadow: none !important;
-    padding: 6px !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin: 0 !important;
-  }
-  .chart-card .widget-header {
-    color: black !important;
-    font-size: 0.95rem !important;
-  }
-  .chart-card img {
-    width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-    object-fit: contain !important;
-  }
-  .summary-table {
-    font-size: 10px !important;
-    margin-top: 4px !important;
-  }
-  .summary-table th,
-  .summary-table td {
-    color: black !important;
-    border-color: #000 !important;
-    background: white !important;
-    padding: 4px !important;
-  }
-  .summary-table th {
-    background: #f5f5f0 !important;
-  }
-  .widget-placeholder,
-  .widget-header strong,
-  .summary-table,
-  .summary-table th,
-  .summary-table td {
-    color: black !important;
-    background: white !important;
-  }
-  .custom-navbar,
-  .control-panel,
-  .custom-footer,
-  .modal,
-  .btn,
-  button {
-    display: none !important;
-  }
-}
-
-.paper-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(200, 255, 0, 0.25);
-}
-
-.paper-header h4 {
-  margin: 0;
-  color: #c8ff00;
-}
-
-.paper-header p {
-  margin: 4px 0 0;
-  color: #8ea13a;
-  font-size: 0.9rem;
-}
-
-.paper-badge {
-  border: 1px solid #c8ff00;
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  color: #c8ff00;
-}
-
+/* ===== Widget Grid ===== */
 .widget-grid {
   display: grid;
-  gap: 16px;
+  gap: 4px;
   flex: 1;
   grid-template-columns: 1fr;
 }
@@ -342,6 +222,26 @@ input {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.widget-grid,
+.widget-grid.stacked,
+.widget-grid.single,
+.widget-grid.dual,
+.widget-grid.triple,
+.widget-grid.quad {
+  grid-template-columns: 1fr !important;
+  grid-auto-rows: auto;
+  grid-auto-flow: row !important;
+}
+
+.widget-grid.stacked > .chart-card,
+.widget-grid.single > .chart-card,
+.widget-grid.dual > .chart-card,
+.widget-grid.triple > .chart-card,
+.widget-grid.quad > .chart-card {
+  width: 100% !important;
+}
+
+/* ===== Widget Card ===== */
 .widget-card {
   border: 1px solid rgba(200, 255, 0, 0.25);
   border-radius: 12px;
@@ -374,6 +274,10 @@ input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.widget-header strong {
+  color: #c8ff00;
 }
 
 .widget-label {
@@ -414,6 +318,46 @@ input {
   font-size: 0.9rem;
 }
 
+/* ===== Chart Card ===== */
+.chart-card {
+  border: 1px solid #111;
+  background: #ffffff;
+  padding: 8px 12px 12px 12px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chart-card .widget-header {
+  color: #111;
+  font-size: 0.95rem;
+}
+
+.chart-canvas {
+  width: 100% !important;
+  min-height: 100px;
+  height: auto !important;
+}
+
+/* ===== Summary Table ===== */
+.summary-table {
+  width: 100%;
+  max-height: 220px;
+  overflow: auto;
+  color: #111;
+}
+
+.summary-table th,
+.summary-table td {
+  border: 1px solid #111;
+}
+
+.summary-table th {
+  background: #f7f7f7;
+}
+
+/* ===== Navbar & Footer ===== */
 .custom-navbar {
   background: #0a0a0a;
   border-bottom: 1px solid #c8ff00;
@@ -444,7 +388,7 @@ input {
   text-decoration: none;
 }
 
-/* Modal Styling */
+/* ===== Modal ===== */
 .modal-content {
   background: #0a0a0a;
   border: 2px solid #c8ff00;
@@ -491,7 +435,17 @@ input {
   color: #888;
 }
 
-/* Modal Button Styling */
+.modal-body select option {
+  background: #1a1a1a;
+  color: #c8ff00;
+}
+
+.modal-body select option:checked {
+  background: #c8ff00;
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
 .modal-footer .btn-secondary {
   background: #0a0a0a;
   border: 1px solid #c8ff00;
@@ -517,86 +471,130 @@ input {
   color: #0a0a0a;
 }
 
-/* Select option styling */
-.modal-body select option {
-  background: #1a1a1a;
+/* ===== Paper Header ===== */
+.paper-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(200, 255, 0, 0.25);
+}
+
+.paper-header h4 {
+  margin: 0;
   color: #c8ff00;
 }
 
-.modal-body select option:checked {
-  background: #c8ff00;
-  color: #0a0a0a;
-  font-weight: 600;
+.paper-header p {
+  margin: 4px 0 0;
+  color: #8ea13a;
+  font-size: 0.9rem;
 }
 
-/* Chart card styles for stacked A4 preview */
-.widget-grid,
-.widget-grid.stacked,
-.widget-grid.single,
-.widget-grid.dual,
-.widget-grid.triple,
-.widget-grid.quad {
-  grid-template-columns: 1fr !important;
-  grid-auto-rows: auto;
-  grid-auto-flow: row !important;
+.paper-badge {
+  border: 1px solid #c8ff00;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  color: #c8ff00;
 }
 
-.widget-grid.stacked > .chart-card,
-.widget-grid.single > .chart-card,
-.widget-grid.dual > .chart-card,
-.widget-grid.triple > .chart-card,
-.widget-grid.quad > .chart-card {
-  width: 100% !important;
-}
-
-.chart-card {
-  border: 1px solid #111;
-  background: #ffffff;
-  padding: 8px 12px 12px 12px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.chart-card .widget-header {
-  color: #111;
-  font-size: 0.95rem;
-}
-
-.chart-canvas {
-  width: 100% !important;
-  min-height: 100px;
-}
-
-.summary-table {
-  width: 100%;
-  max-height: 220px;
-  overflow: auto;
-  color: #111;
-}
-
-.summary-table th,
-.summary-table td {
-  border: 1px solid #111;
-}
-
-.summary-table th {
-  background: #f7f7f7;
-}
-
+/* ===== Print Styles ===== */
 @media print {
-  .chart-card,
-  .paper-sheet,
+  @page { size: A4 portrait; margin: 5mm; }
+
+  html, body {
+    width: 210mm !important;
+    min-height: 297mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+    overflow: visible !important;
+  }
+
+  .paper-sheet {
+    width: 210mm !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 12mm !important;
+    box-sizing: border-box !important;
+    background: white !important;
+    color: black !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+
+  .widget-grid {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+    grid-auto-flow: row !important;
+    gap: 6px !important;
+  }
+
+  .widget-grid > .chart-card {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .chart-card {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    padding: 6px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin: 0 !important;
+  }
+
+  .chart-card .widget-header {
+    color: black !important;
+    font-size: 0.95rem !important;
+  }
+
+  .chart-card img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+  }
+
+  .summary-table {
+    font-size: 10px !important;
+    margin-top: 4px !important;
+  }
+
+  .summary-table th,
+  .summary-table td {
+    color: black !important;
+    border-color: #000 !important;
+    background: white !important;
+    padding: 4px !important;
+  }
+
+  .summary-table th {
+    background: #f5f5f0 !important;
+  }
+
+  .widget-placeholder,
+  .widget-header strong,
   .summary-table,
   .summary-table th,
-  .summary-table td,
-  .widget-header strong {
+  .summary-table td {
     color: black !important;
     background: white !important;
   }
-}
 
-.widget-header strong {
-  color: #c8ff00;
+  .custom-navbar,
+  .control-panel,
+  .custom-footer,
+  .modal,
+  .btn,
+  button {
+    display: none !important;
+  }
 }

@@ -5,12 +5,23 @@
             <h3>Kontrol Merkezi</h3>
 
             <div class="control-group">
-                <label>Batch ID</label>
+                <label for="batchIdInput">Batch ID</label>
                 <div class="d-flex gap-2">
-                    <input id="batchIdInput" type="text" class="form-control" placeholder="Batch ID girin veya seçin" list="batchList" autocomplete="off" />
+                    <div style="position: relative; flex: 1;">
+                        <input id="batchIdInput" type="text" class="form-control" placeholder="Batch ID girin veya seçin" autocomplete="off" readonly />
+                        <button id="batchDropdownToggle" type="button" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #c8ff00; font-size: 14px; z-index: 2;">
+                            &#9660;
+                        </button>
+                    </div>
                     <button id="btnLoadBatch" class="btn btn-primary btn-sm" style="white-space: nowrap;">Yükle</button>
                 </div>
-                <datalist id="batchList"></datalist>
+                <!-- Custom Dropdown -->
+                <div id="batchDropdown" class="custom-dropdown" style="display: none;">
+                    <div id="batchDropdownSearch" style="padding: 8px 10px; border-bottom: 1px solid #333;">
+                        <input type="text" class="form-control form-control-sm" placeholder="Batch ID ara..." id="batchSearchInput" style="background: #111; color: #c8ff00; border: 1px solid #444; font-size: 12px;" />
+                    </div>
+                    <div id="batchDropdownList" style="max-height: 250px; overflow-y: auto;"></div>
+                </div>
             </div>
 
             <div class="control-group">
@@ -36,8 +47,8 @@
             </div>
 
             <div class="control-group">
-                <label>Veri Aralığı</label>
-                <select id="timeRangeSelect" class="form-control">
+                <label for="timeRangeSelect">Veri Aralığı</label>
+                <select id="timeRangeSelect" class="form-control" style="background: #0a0a0a; color: #c8ff00; border: 1px solid #c8ff00;">
                     <option value="daily">Günlük</option>
                     <option value="monthly">Aylık</option>
                     <option value="yearly">Yıllık</option>
@@ -45,16 +56,16 @@
             </div>
 
             <div class="control-group">
-                <label>Son Kaç?</label>
-                <input id="yearCountInput" type="number" class="form-control" value="1" min="1" max="20" style="width: 80px;" />
+                <label for="yearCountInput">Son Kaç?</label>
+                <input id="yearCountInput" type="number" class="form-control" value="1" min="1" max="20" style="width: 80px; background: #0a0a0a; color: #c8ff00; border: 1px solid #c8ff00;" />
                 <small >Örnek: Günlük: Son 1gün, Aylık: Son 1 ay, Yıllık: Son 1 yıl</small>
             </div>
 
             <div class="control-group">
-                <label>Tablo Boyutu</label>
+                <label for="chartHeightSlider">Tablo Boyutu</label>
                 <div class="d-flex align-items-center gap-2">
-                    <input id="chartHeightSlider" type="range" min="50" max="500" value="170" class="form-range" />
-                    <span id="chartHeightValue">170 px</span>
+                    <input id="chartHeightSlider" type="range" min="50" max="500" value="190" class="form-range" style="accent-color: #c8ff00;" />
+                    <span id="chartHeightValue">190 px</span>
                 </div>
             </div>
 
@@ -152,7 +163,7 @@
     .widget-grid {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 4px;
     }
     .chart-canvas-wrapper {
         position: relative;
@@ -189,6 +200,79 @@
     .category-toggle:checked:hover {
         background-color: #ffc107 !important;
         border-color: #ffc107 !important;
+    }
+    /* Custom Batch Dropdown Styles (Dark Theme) */
+    .custom-dropdown {
+        position: absolute;
+        top: calc(100% + 2px);
+        left: 0;
+        width: 100%;
+        min-width: 280px;
+        z-index: 1050;
+        background: #1a1a1a;
+        border: 1px solid #c8ff00;
+        border-radius: 6px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    #batchDropdownSearch {
+        padding: 8px 10px !important;
+        border-bottom: 1px solid #333 !important;
+    }
+    #batchDropdownSearch input {
+        background: #111 !important;
+        color: #c8ff00 !important;
+        border: 1px solid #444 !important;
+        border-radius: 4px !important;
+        font-size: 12px;
+    }
+    #batchDropdownSearch input::placeholder {
+        color: #666 !important;
+    }
+    #batchDropdownSearch input:focus {
+        border-color: #c8ff00 !important;
+        outline: none;
+    }
+    #batchDropdownList {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+    #batchDropdownList::-webkit-scrollbar {
+        width: 6px;
+    }
+    #batchDropdownList::-webkit-scrollbar-track {
+        background: #1a1a1a;
+    }
+    #batchDropdownList::-webkit-scrollbar-thumb {
+        background: #444;
+        border-radius: 3px;
+    }
+    .custom-dropdown .dropdown-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        border-bottom: 1px solid #2a2a2a;
+        transition: background 0.15s;
+        color: #ccc;
+    }
+    .custom-dropdown .dropdown-item:hover {
+        background: #2a2a2a;
+        color: #c8ff00;
+    }
+    .custom-dropdown .dropdown-item:last-child {
+        border-bottom: none;
+    }
+    .custom-dropdown .dropdown-item .batch-id {
+        font-weight: 700;
+        color: #c8ff00;
+    }
+    .custom-dropdown .dropdown-item .batch-details {
+        color: #888;
+        font-size: 11px;
+        margin-top: 2px;
+    }
+    #batchIdInput {
+        cursor: pointer;
+        padding-right: 30px;
     }
     @@media print {
         .control-panel, #pdfSaveBtn, .toolbar-group .toolbar-btn:not(.toolbar-db) {
@@ -248,16 +332,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
 
     let chartInstances = {};
-    let currentChartHeight = 170;
+    let currentChartHeight = 190;
 
     // --- Element Seçimleri ---
     const batchIdInput = document.getElementById('batchIdInput');
-    const batchList = document.getElementById('batchList');
     const widgetGrid = document.getElementById('widgetGrid');
     const chartHeightSlider = document.getElementById('chartHeightSlider');
     const chartHeightValue = document.getElementById('chartHeightValue');
     const reportHeader = document.getElementById('reportHeader');
     const comparisonSection = document.getElementById('comparisonSection');
+    const batchDropdown = document.getElementById('batchDropdown');
+    const batchDropdownToggle = document.getElementById('batchDropdownToggle');
+    const batchDropdownList = document.getElementById('batchDropdownList');
+    const batchSearchInput = document.getElementById('batchSearchInput');
+
+    let allBatches = []; // Tüm batch listesi (yeni→eski)
 
     // --- Tablo Boyutu Slider ---
     chartHeightSlider.addEventListener('input', function () {
@@ -279,7 +368,86 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (card) {
                 card.style.display = this.checked ? '' : 'none';
             }
+            updateVisibleXLabels();
         });
+    });
+
+    // --- Dropdown Toggle ---
+    function toggleDropdown() {
+        const isOpen = batchDropdown.style.display === 'block';
+        batchDropdown.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen) {
+            batchSearchInput.value = '';
+            renderDropdownItems(allBatches);
+            batchSearchInput.focus();
+        }
+    }
+
+    function closeDropdown() {
+        batchDropdown.style.display = 'none';
+    }
+
+    function renderDropdownItems(batches) {
+        batchDropdownList.innerHTML = '';
+        if (batches.length === 0) {
+            batchDropdownList.innerHTML = '<div style="padding: 8px 12px; color: #888; font-size: 13px; text-align: center;">Batch bulunamadı.</div>';
+            return;
+        }
+        batches.forEach(batch => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.dataset.batchId = batch.batchId;
+            const dateStr = new Date(batch.batchDate).toLocaleString('tr-TR');
+            item.innerHTML = `<div class="batch-id">${batch.batchId}</div><div class="batch-details">${batch.shipName || '—'} | ${batch.loadType || '—'} | ${dateStr}</div>`;
+            item.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const id = this.dataset.batchId;
+                batchIdInput.value = id;
+                sessionStorage.setItem('lastBatchId', id);
+                closeDropdown();
+                // Otomatik yükle
+                loadChartData(parseInt(id));
+            });
+            batchDropdownList.appendChild(item);
+        });
+    }
+
+    // Dropdown toggle butonu
+    batchDropdownToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+
+    // Input'a tıklayınca dropdown aç
+    batchIdInput.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+
+    // Arama inputu
+    batchSearchInput.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    batchSearchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        if (query === '') {
+            renderDropdownItems(allBatches);
+        } else {
+            const filtered = allBatches.filter(b =>
+                b.batchId.toString().includes(query) ||
+                (b.shipName && b.shipName.toLowerCase().includes(query)) ||
+                (b.loadType && b.loadType.toLowerCase().includes(query))
+            );
+            renderDropdownItems(filtered);
+        }
+    });
+
+    // Dışarı tıklayınca kapat
+    document.addEventListener('click', function (e) {
+        if (!batchDropdown.contains(e.target) && e.target !== batchIdInput && e.target !== batchDropdownToggle) {
+            closeDropdown();
+        }
     });
 
     // --- Batch Load Button ---
@@ -317,7 +485,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const response = await fetch('/Data/GetBatches');
             if (!response.ok) {
-                console.error('GetBatches HTTP hatası:', response.status, response.statusText);
+                const errText = await response.text().catch(() => '');
+                console.error('GetBatches HTTP hatası:', response.status, response.statusText, errText);
                 return;
             }
             const data = await response.json();
@@ -328,21 +497,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             if (data.batches) {
-                batchList.innerHTML = '';
-                data.batches.forEach(batch => {
-                    const dateStr = new Date(batch.batchDate).toLocaleString('tr-TR');
-                    const opt = document.createElement('option');
-                    opt.value = batch.batchId;
-                    opt.textContent = `${batch.batchId} - ${batch.shipName} - ${batch.loadType} (${dateStr})`;
-                    batchList.appendChild(opt);
-                });
+                // API zaten DESC sıralı döndürüyor (yeni→eski), doğrudan kullan
+                allBatches = data.batches;
+                renderDropdownItems(allBatches);
 
-                if (data.batches.length > 0) {
+                if (allBatches.length > 0) {
                     const savedBatchId = sessionStorage.getItem('lastBatchId');
-                    if (savedBatchId && data.batches.some(b => b.batchId.toString() === savedBatchId)) {
+                    if (savedBatchId && allBatches.some(b => b.batchId.toString() === savedBatchId)) {
                         batchIdInput.value = savedBatchId;
+                        // F5 sonrası kaydedilmiş Batch ID ile otomatik yükle
+                        loadChartData(parseInt(savedBatchId));
                     } else {
-                        batchIdInput.value = data.batches[0].batchId;
+                        batchIdInput.value = allBatches[0].batchId;
+                        // İlk açılışta ilk batch'i otomatik yükle
+                        loadChartData(allBatches[0].batchId);
                     }
                 }
             }
@@ -446,7 +614,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const card = document.createElement('section');
             card.className = 'chart-card';
             card.id = `card_${groupKey}`;
-            card.style.cssText = 'position: relative; background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 8px 12px 12px 12px; margin-bottom: 4px;';
+            card.style.cssText = 'position: relative; background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 8px 12px 12px 12px; margin-bottom: 0;';
             const checkboxId = groupKey === 'flow' ? 'widget_fl' : `widget_${groupKey}`;
             const checkbox = document.getElementById(checkboxId);
             card.style.display = checkbox && checkbox.checked ? '' : 'none';
@@ -489,7 +657,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const canvasWrapper = document.createElement('div');
             canvasWrapper.className = 'chart-canvas-wrapper';
             canvasWrapper.style.height = height;
-            canvasWrapper.style.marginBottom = '4px';
+            canvasWrapper.style.marginBottom = '0';
             card.appendChild(canvasWrapper);
 
             const canvas = document.createElement('canvas');
@@ -573,13 +741,33 @@ document.addEventListener('DOMContentLoaded', async function () {
                 canvasWrapper.innerHTML = '<p class="text-muted p-2">Bu grup için veri bulunamadı.</p>';
             }
         });
+        // Dinamik X ekseni etiketleri: sadece en alttaki aktif grafiğin X etiketleri görünür
+        updateVisibleXLabels();
+    }
+
+    // --- Dinamik X Ekseni Etiketleri ---
+    // Sadece en alttaki (sonda) kalan aktif grafiğin X ekseni tarih/saat etiketleri görünür.
+    // Diğer grafiklerin X etiketleri gizlidir.
+    function updateVisibleXLabels() {
+        const visibleCards = Array.from(widgetGrid.querySelectorAll('.chart-card'))
+            .filter(c => c.style.display !== 'none');
+        const lastCard = visibleCards.length > 0 ? visibleCards[visibleCards.length - 1] : null;
+
+        Object.entries(chartInstances).forEach(([groupKey, chart]) => {
+            if (!chart || !chart.options || !chart.options.scales || !chart.options.scales.x) return;
+            const card = document.getElementById(`card_${groupKey}`);
+            const isLastVisible = card && card === lastCard;
+            chart.options.scales.x.ticks.display = isLastVisible;
+            chart.options.scales.x.border.display = isLastVisible;
+            chart.update();
+        });
     }
 
     function fillSummaryTable(groupKey, data, columns) {
         const table = document.getElementById(`summary_${groupKey}`);
         if (!table || columns.length === 0) return;
 
-        let html = '<thead><tr><th style="padding:2px 6px;font-size:9px;">Kolon</th><th style="padding:2px 6px;font-size:9px;">Min</th><th style="padding:2px 6px;font-size:9px;">Maks</th><th style="padding:2px 6px;font-size:9px;">Ort</th><th style="padding:2px 6px;font-size:9px;">Son</th></tr></thead><tbody>';
+        let html = '<thead><tr><th style="padding:2px 6px;font-size:9px;">Kolon</th><th style="padding:2px 6px;font-size:9px;">Min</th><th style="padding:2px 6px;font-size:9px;">Maks</th><th style="padding:2px 6px;font-size:9px;">Ort</th><th style="padding:2px 6px;font-size:9px;">İlk</th></tr></thead><tbody>';
         
         columns.forEach(col => {
             const values = (data.series[col] || []).filter(v => !isNaN(v));
@@ -588,14 +776,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             const min = Math.min(...values);
             const max = Math.max(...values);
             const avg = values.reduce((a, b) => a + b, 0) / values.length;
-            const last = values[values.length - 1];
+            const first = values[0]; // ASC sıralamada ilk kayıt = en eski veri
 
             html += `<tr>
                 <td style="padding:2px 6px;font-size:9px;">${col}</td>
                 <td style="padding:2px 6px;font-size:9px;text-align:center;">${min.toFixed(2)}</td>
                 <td style="padding:2px 6px;font-size:9px;text-align:center;">${max.toFixed(2)}</td>
                 <td style="padding:2px 6px;font-size:9px;text-align:center;">${avg.toFixed(2)}</td>
-                <td style="padding:2px 6px;font-size:9px;text-align:center;">${last.toFixed(2)}</td>
+                <td style="padding:2px 6px;font-size:9px;text-align:center;">${first.toFixed(2)}</td>
             </tr>`;
         });
 
@@ -613,7 +801,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     // --- Event Listeners ---
     const timeRangeSelect = document.getElementById('timeRangeSelect');
     if (timeRangeSelect) {
+        // F5 sonrası restore
+        const savedTimeRange = sessionStorage.getItem('lastTimeRange');
+        if (savedTimeRange) timeRangeSelect.value = savedTimeRange;
+
         timeRangeSelect.addEventListener('change', function() {
+            sessionStorage.setItem('lastTimeRange', this.value);
             const currentBatchId = document.getElementById('batchIdInput').value;
             if (currentBatchId) {
                 loadChartData(currentBatchId);
@@ -623,7 +816,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const yearCountInput = document.getElementById('yearCountInput');
     if (yearCountInput) {
+        // F5 sonrası restore
+        const savedYearCount = sessionStorage.getItem('lastYearCount');
+        if (savedYearCount) yearCountInput.value = savedYearCount;
+
         yearCountInput.addEventListener('change', function() {
+            sessionStorage.setItem('lastYearCount', this.value);
             const currentBatchId = document.getElementById('batchIdInput').value;
             if (currentBatchId) {
                 loadChartData(currentBatchId);
@@ -632,6 +830,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // --- Başlat ---
+    // loadBatches içinde otomatik yüklemesi zaten var (session veya ilk batch)
     await loadBatches();
 
     // --- Bağlantı Durumunu Göster ---
@@ -643,5 +842,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
         .catch(() => {});
+
+    // --- Global DB Connect Event Listener ("Veritabanına bağlan" sonrası otomatik yükleme) ---
+    document.addEventListener('dbConnected', function () {
+        loadBatches();
+    });
 });
 </script>

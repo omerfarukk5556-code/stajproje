@@ -11,27 +11,27 @@
 <body>
     <div id="loginSection" class="login-section active">
         
-        
-        
         <div class="login-box" id="loginBox">
             <h2>Kullanıcı Girişi</h2>
             <form id="loginForm" asp-controller="Account" asp-action="Login" method="post">
                 <input type="hidden" name="actionType" value="login" />
-                <input type="text" name="Username" placeholder="Kullanıcı Adı" required />
-                <input type="password" name="Password" placeholder="Şifre" required />
+                <label for="loginUsername"></label>
+                <input type="text" id="loginUsername" name="Username" placeholder="Kullanıcı Adı" required />
+                <label for="loginPassword"></label>
+                <input type="password" id="loginPassword" name="Password" placeholder="Şifre" required />
                 <button type="submit" class="btn btn-primary">Giriş Yap</button>
             </form>
             @if (TempData["Error"] != null)
             {
-                <div class="message-box error-message" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: #ffe8e8; color: #c62828; font-size: 0.95rem; text-align: center;">@TempData["Error"]</div>
+                <div class="message-box error-message" role="alert" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: #ffe8e8; color: #c62828; font-size: 0.95rem; text-align: center;">@TempData["Error"]</div>
             }
             @if (TempData["Success"] != null)
             {
-                <div class="message-box success-message" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: #f1fce2; color: #4caf50; font-size: 0.95rem; text-align: center;">@TempData["Success"]</div>
+                <div class="message-box success-message" role="alert" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: #f1fce2; color: #4caf50; font-size: 0.95rem; text-align: center;">@TempData["Success"]</div>
             }
             <div style="margin-top: 20px; text-align: center;">
                 <p style="color: #666; font-size: 0.9rem;">Hesabın yok mu? 
-                    <a href="javascript:void(0);" onclick="toggleForms()" style="color: var(--primary);">Kayıt Ol</a>
+                    <button type="button" id="btnShowRegister" style="background:none; border:none; color: var(--primary); cursor:pointer; text-decoration:underline;">Kayıt Ol</button>
                 </p>
             </div>
         </div>
@@ -40,17 +40,19 @@
         <div class="login-box" id="registerBox" style="display: none;">
             <h2>Kayıt Ol</h2>
             <form id="registerForm" asp-controller="Account" asp-action="Login" method="post">
-                <input type="text" name="Username" placeholder="Kullanıcı Adı" required />
-                <input type="email" name="Email" placeholder="E-posta" required />
-                <input type="password" name="Password" placeholder="Şifre" required />
-                
+                <label for="regUsername"></label>
+                <input type="text" id="regUsername" name="Username" placeholder="Kullanıcı Adı" required />
+                <label for="regEmail"></label>
+                <input type="email" id="regEmail" name="Email" placeholder="E-posta" required />
+                <label for="regPassword"></label>
+                <input type="password" id="regPassword" name="Password" placeholder="Şifre" required />
                 
                 <input type="hidden" name="actionType" value="register" />
                 
                 <button type="submit" class="btn btn-primary">Kayıt Ol</button>
             </form>
             <div style="margin-top: 20px; text-align: center;">
-                <a href="javascript:void(0);" onclick="toggleForms()" style="color: var(--primary);">Giriş Ekranına Dön</a>
+                <button type="button" id="btnShowLogin" style="background:none; border:none; color: var(--primary); cursor:pointer; text-decoration:underline;">Giriş Ekranına Dön</button>
             </div>
         </div>
 
@@ -68,6 +70,17 @@
                 registerBox.style.display = 'block';
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnShowRegister = document.getElementById('btnShowRegister');
+            if (btnShowRegister) {
+                btnShowRegister.addEventListener('click', toggleForms);
+            }
+            var btnShowLogin = document.getElementById('btnShowLogin');
+            if (btnShowLogin) {
+                btnShowLogin.addEventListener('click', toggleForms);
+            }
+        });
     </script>
 </body>
 </html>

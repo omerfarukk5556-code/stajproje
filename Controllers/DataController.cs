@@ -8,7 +8,6 @@ namespace StajWebProjesi.Controllers;
 
 using Microsoft.AspNetCore.Mvc; 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Data.SqlClient;
 
 //[Authorize] // Bunu ekle
 [ApiController]
@@ -23,7 +22,7 @@ public class DataController : ControllerBase
         _configuration = configuration;
     }
 
-    private string GetConnectionString()
+    private string? GetConnectionString()
     {
         // Önce doğrudan kaydedilen connection string'i dene
         var connStr = HttpContext.Session.GetString("DbConnectionString");
@@ -64,7 +63,12 @@ public class DataController : ControllerBase
     {
         try
         {
-            var connectionString = GetConnectionString();
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("DbConnectionString")) &&
+                string.IsNullOrEmpty(HttpContext.Session.GetString("DbConnectionInfo")))
+            {
+                return BadRequest(new { error = "Önce veritabanına bağlanın." });
+            }
+            var connectionString = GetConnectionString() ?? throw new InvalidOperationException("Bağlantı bilgisi bulunamadı.");
             using var conn = new SqlConnection(connectionString);
             await conn.OpenAsync();
 
@@ -98,7 +102,7 @@ public class DataController : ControllerBase
     {
         try
         {
-            var connectionString = GetConnectionString();
+            var connectionString = GetConnectionString() ?? throw new InvalidOperationException("Bağlantı bilgisi bulunamadı.");
             using var conn = new SqlConnection(connectionString);
             await conn.OpenAsync();
 
@@ -169,8 +173,8 @@ public class DataController : ControllerBase
                     timeFilter = $" AND [{tsCol}] >= DATEADD(year, -{yearCount}, @batchEnd) AND [{tsCol}] <= @batchEnd";
             }
 
-            // DESC sıralama: en yeni veri en başta
-            var sql = $"SELECT [{tsCol}], {selectCols} FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId{timeFilter} ORDER BY [{tsCol}] DESC";
+            // ASC sıralama: en eski veri en başta (kronolojik)
+            var sql = $"SELECT [{tsCol}], {selectCols} FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId{timeFilter} ORDER BY [{tsCol}] ASC";
             
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@batchId", batchId);
@@ -239,7 +243,7 @@ public class DataController : ControllerBase
     {
         try
         {
-            var connectionString = GetConnectionString();
+            var connectionString = GetConnectionString() ?? throw new InvalidOperationException("Bağlantı bilgisi bulunamadı.");
 
             // Her sorgu için ayrı bağlantı açarak DataReader çakışmasını önle
             
@@ -301,10 +305,10 @@ public class DataController : ControllerBase
                 
                 if (await reader.ReadAsync())
                 {
-                    string gsvKons = reader.IsDBNull(0) ? "0" : reader.GetValue(0).ToString();
-                    string massKons = reader.IsDBNull(1) ? "0" : reader.GetValue(1).ToString();
-                    string gsvMeter = reader.IsDBNull(2) ? "0" : reader.GetValue(2).ToString();
-                    string massMeter = reader.IsDBNull(3) ? "0" : reader.GetValue(3).ToString();
+                    string gsvKons = reader.IsDBNull(0) ? "0" : reader.GetValue(0)?.ToString() ?? "0";
+                    string massKons = reader.IsDBNull(1) ? "0" : reader.GetValue(1)?.ToString() ?? "0";
+                    string gsvMeter = reader.IsDBNull(2) ? "0" : reader.GetValue(2)?.ToString() ?? "0";
+                    string massMeter = reader.IsDBNull(3) ? "0" : reader.GetValue(3)?.ToString() ?? "0";
 
                     return Ok(new {
                         gsvKonsement = gsvKons,

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using StajWebProjesi.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace StajWebProjesi.Controllers
 {
@@ -10,9 +12,17 @@ namespace StajWebProjesi.Controllers
     {
         private string GetConnectionString()
         {
-            // Projenin tam yolunu yaz (Hata payını sıfırla)
             string dbPath = @"C:\Users\omer\Desktop\staj proje\StajWebProjesi\stajweb.db";
             return $"Data Source={dbPath}";
+        }
+
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
         }
         
         [HttpGet]
@@ -25,41 +35,46 @@ namespace StajWebProjesi.Controllers
             using var conn = new SqliteConnection(connString);
             conn.Open();
 
-            // BLOĞU METODUN İÇİNE ALDIK
+            string hashedPassword = HashPassword(Password);
+
             if (actionType == "register")
             {
-                // 1. Tablo yoksa oluştur
                 var createTableCmd = new SqliteCommand(@"CREATE TABLE IF NOT EXISTS Users (
                                                     Id INTEGER PRIMARY KEY AUTOINCREMENT, 
                                                     Username TEXT NOT NULL, 
                                                     Password TEXT NOT NULL)", conn);
                 createTableCmd.ExecuteNonQuery();
 
-                // 2. Kullanıcıyı ekle
                 var insertCmd = new SqliteCommand("INSERT INTO Users (Username, Password) VALUES (@u, @p)", conn);
                 insertCmd.Parameters.AddWithValue("@u", Username);
-                insertCmd.Parameters.AddWithValue("@p", Password);
+                insertCmd.Parameters.AddWithValue("@p", hashedPassword);
                 insertCmd.ExecuteNonQuery();
 
                 TempData["Success"] = "Kayıt başarılı, şimdi giriş yapabilirsin!";
                 return RedirectToAction(nameof(Login));
             }
 
-            // GİRİŞ KONTROLÜ
             var cmd = new SqliteCommand("SELECT Id, Username FROM Users WHERE Username=@u AND Password=@p", conn);
             cmd.Parameters.AddWithValue("@u", Username);
-            cmd.Parameters.AddWithValue("@p", Password);
+            cmd.Parameters.AddWithValue("@p", hashedPassword);
             
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                HttpContext.Session.SetString("UserId", reader["Id"].ToString());
-                HttpContext.Session.SetString("Username", reader["Username"].ToString());
+                HttpContext.Session.SetString("UserId", reader["Id"]?.ToString() ?? "");
+                HttpContext.Session.SetString("Username", reader["Username"]?.ToString() ?? "");
                 return RedirectToAction("Index", "Home");
             }
 
             TempData["Error"] = "Hatalı giriş!";
             return RedirectToAction(nameof(Login));
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Json(new { success = true });
         }
     }
 }
