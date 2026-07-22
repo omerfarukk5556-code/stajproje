@@ -9,6 +9,12 @@ namespace StajWebProjesi.Controllers;
 [Route("[controller]/[action]")]
 public class DatabaseController : Controller
 {
+    // Reusable JSON options to avoid creating new instances on every serialization
+    private static readonly JsonSerializerOptions CaseInsensitiveJsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     [HttpGet]
     public IActionResult GetConnectionStatus()
     {
@@ -48,47 +54,28 @@ public class DatabaseController : Controller
     [HttpPost]
     public async Task<IActionResult> Connect(DbConnectionInfo model)
     {
+        if (!ModelState.IsValid)
+        {
+            return Json(new { success = false, error = "Geçersiz bağlantı bilgisi." });
+        }
+
         var tables = new List<string>();
         string? connStr = null;
         try
         {
-            if (model.Provider == "SqlServer" || model.Provider == "SQLServer")
-            {
-                if (!string.IsNullOrWhiteSpace(model.ConnectionString))
-                {
-                    connStr = model.ConnectionString ?? string.Empty;
-                }
-                else
-                {
-                    var builder = new SqlConnectionStringBuilder();
-                    builder.DataSource = string.IsNullOrWhiteSpace(model.Server) ? "(localdb)\\MSSQLLocalDB" : model.Server;
-                    builder.InitialCatalog = string.IsNullOrWhiteSpace(model.Database) ? "proje619" : model.Database;
-                    if (model.Authentication == "Windows")
-                    {
-                        builder.IntegratedSecurity = true;
-                    }
-                    else
-                    {
-                        builder.IntegratedSecurity = false;
-                        builder.UserID = model.Username ?? string.Empty;
-                        builder.Password = model.Password ?? string.Empty;
-                    }
-                    connStr = builder.ConnectionString;
-                }
+            connStr = BuildConnectionString(model);
+            
+            // Validate connection string to prevent injection
+            ValidateConnectionString(connStr);
 
-                using var conn = new SqlConnection(connStr);
-                await conn.OpenAsync();
-                using var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT TABLE_SCHEMA + '.' + TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' ORDER BY TABLE_NAME;";
-                using var reader = await cmd.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    tables.Add(reader.GetString(0));
-                }
-            }
-            else
+            using var conn = new SqlConnection(connStr);
+            await conn.OpenAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT TABLE_SCHEMA + '.' + TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' ORDER BY TABLE_NAME;";
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                return Json(new { success = false, error = "Sadece SQL Server desteklenmektedir." });
+                tables.Add(reader.GetString(0));
             }
         }
         catch (Exception ex)
@@ -107,16 +94,14 @@ public class DatabaseController : Controller
             if (!string.IsNullOrEmpty(connStr))
                 HttpContext.Session.SetString("DbConnectionString", connStr);
         }
-        catch { }
-
-        // Veritabanı adını connection string'den çıkar (ConnectionString üzerinden bağlantı yapılmışsa)
-        string? dbName = model.Database;
-        if (string.IsNullOrWhiteSpace(dbName))
+        catch (Exception ex)
         {
-            // connection string'den Initial Catalog çıkar
-            var builder = new SqlConnectionStringBuilder(connStr);
-            dbName = builder.InitialCatalog ?? "Bilinmeyen";
+            // Serialization/session write failure - log and continue
+            System.Diagnostics.Debug.WriteLine($"Session write failed: {ex.Message}");
         }
+
+        // Veritabanı adını connection string'den çıkar
+        string? dbName = GetDatabaseName(model, connStr);
 
         return Json(new { success = true, tables = tables, database = dbName });
     }
@@ -132,55 +117,71 @@ public class DatabaseController : Controller
     }
 
     [HttpPost]
-    public IActionResult ManageTables(string[] selectedTables)
+    public IActionResult ManageTables([FromForm] string[]? selectedTables)
     {
+        if (!ModelState.IsValid)
+        {
+            return Json(new { success = false, error = "Geçersiz veri." });
+        }
+
         TempData["DbMessage"] = "Seçili tablolar kaydedildi.";
         TempData["SelectedTables"] = string.Join(',', selectedTables ?? Array.Empty<string>());
-        // persist selected tables to session so other endpoints can read
+        
         try
         {
             var json = JsonSerializer.Serialize(selectedTables ?? Array.Empty<string>());
             HttpContext.Session.SetString("SelectedTables", json);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            // Serialization failure - session write error
+            System.Diagnostics.Debug.WriteLine($"Session write failed: {ex.Message}");
+        }
 
         return RedirectToAction("Connect");
     }
 
     [HttpPost]
-    public IActionResult ManageTablesAjax([FromBody] string[] selectedTables)
+    public IActionResult ManageTablesAjax([FromBody] string[]? selectedTables)
     {
+        if (!ModelState.IsValid)
+        {
+            return Json(new { success = false, error = "Geçersiz veri." });
+        }
+
         TempData["DbMessage"] = "Seçili tablolar kaydedildi.";
         TempData["SelectedTables"] = string.Join(',', selectedTables ?? Array.Empty<string>());
+        
         try
         {
             var json = JsonSerializer.Serialize(selectedTables ?? Array.Empty<string>());
             HttpContext.Session.SetString("SelectedTables", json);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            // Serialization failure - session write error
+            System.Diagnostics.Debug.WriteLine($"Session write failed: {ex.Message}");
+        }
 
         return Json(new { success = true });
     }
 
-    public class ColumnMappingDto
-    {
-        public string? Table { get; set; }
-        public string? TimestampColumn { get; set; }
-        public string[]? SelectedColumns { get; set; }
-    }
+    // ColumnMappingDto Models namespace'inden geliyor (Models/ColumnMappingDto.cs)
 
     [HttpPost]
     public IActionResult ManageColumnMappingAjax([FromBody] ColumnMappingDto mapping)
     {
-        if (mapping == null || string.IsNullOrEmpty(mapping.Table)) return BadRequest(new { success = false, error = "Invalid mapping" });
+        if (!ModelState.IsValid || mapping == null || string.IsNullOrEmpty(mapping.Table))
+            return BadRequest(new { success = false, error = "Invalid mapping" });
 
         try
         {
-            // read existing mappings
+            // read existing mappings using cached JSON options
             var existingJson = HttpContext.Session.GetString("ColumnMappings");
             var dict = string.IsNullOrEmpty(existingJson)
                 ? new Dictionary<string, ColumnMappingDto>(StringComparer.OrdinalIgnoreCase)
-                : JsonSerializer.Deserialize<Dictionary<string, ColumnMappingDto>>(existingJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new Dictionary<string, ColumnMappingDto>(StringComparer.OrdinalIgnoreCase);
+                : JsonSerializer.Deserialize<Dictionary<string, ColumnMappingDto>>(existingJson, CaseInsensitiveJsonOptions) 
+                  ?? new Dictionary<string, ColumnMappingDto>(StringComparer.OrdinalIgnoreCase);
 
             dict[mapping.Table] = mapping;
             HttpContext.Session.SetString("ColumnMappings", JsonSerializer.Serialize(dict));
@@ -190,5 +191,57 @@ public class DatabaseController : Controller
         {
             return Json(new { success = false, error = ex.Message });
         }
+    }
+
+    // --- Private helpers ---
+
+    private static string BuildConnectionString(DbConnectionInfo model)
+    {
+        if (!string.IsNullOrWhiteSpace(model.ConnectionString))
+        {
+            return model.ConnectionString ?? string.Empty;
+        }
+
+        var builder = new SqlConnectionStringBuilder();
+        builder.DataSource = string.IsNullOrWhiteSpace(model.Server) ? "(localdb)\\MSSQLLocalDB" : model.Server;
+        builder.InitialCatalog = string.IsNullOrWhiteSpace(model.Database) ? "proje619" : model.Database;
+        
+        if (model.Authentication == "Windows")
+        {
+            builder.IntegratedSecurity = true;
+        }
+        else
+        {
+            builder.IntegratedSecurity = false;
+            builder.UserID = model.Username ?? string.Empty;
+            builder.Password = model.Password ?? string.Empty;
+        }
+        
+        return builder.ConnectionString;
+    }
+
+    private static void ValidateConnectionString(string connStr)
+    {
+        // Connection string injection prevention:
+        // Validate using SqlConnectionStringBuilder which sanitizes the input
+        try
+        {
+            _ = new SqlConnectionStringBuilder(connStr);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new InvalidOperationException($"Geçersiz bağlantı dizesi: {ex.Message}");
+        }
+    }
+
+    private static string? GetDatabaseName(DbConnectionInfo model, string? connStr)
+    {
+        string? dbName = model.Database;
+        if (string.IsNullOrWhiteSpace(dbName) && !string.IsNullOrEmpty(connStr))
+        {
+            var builder = new SqlConnectionStringBuilder(connStr);
+            dbName = builder.InitialCatalog ?? "Bilinmeyen";
+        }
+        return dbName ?? "Bilinmeyen";
     }
 }

@@ -1,0 +1,1 @@
+RREC:\Users\omer\Desktop\staj proje\StajWebProjesi\StajWebProjesi.csprojòCSharp14

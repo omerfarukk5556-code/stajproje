@@ -1,28 +1,33 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
-using StajWebProjesi.Models;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
 
 namespace StajWebProjesi.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private string GetConnectionString()
+        private static string GetConnectionString()
         {
-            string dbPath = @"C:\Users\omer\Desktop\staj proje\StajWebProjesi\stajweb.db";
+            // Proje kök dizinini bul - AppContext.BaseDirectory'den parent'a çıkarak
+            string baseDir = AppContext.BaseDirectory;
+            // Geliştirme ortamında bin/Debug/netX.0/ altında olabilir, proje köküne çıkalım
+            var dir = new DirectoryInfo(baseDir);
+            while (dir.Parent != null && !File.Exists(Path.Combine(dir.FullName, "stajweb.db")))
+            {
+                dir = dir.Parent;
+            }
+            string dbPath = Path.Combine(dir.FullName, "stajweb.db");
             return $"Data Source={dbPath}";
         }
 
-        private string HashPassword(string password)
+        private static string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-            }
+            var hashedBytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
+            return Convert.ToHexStringLower(hashedBytes);
         }
         
         [HttpGet]

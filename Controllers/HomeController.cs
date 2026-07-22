@@ -6,11 +6,6 @@ namespace StajWebProjesi.Controllers;
 
 public class HomeController : Controller
 {
-    private bool IsAuthenticated()
-    {
-        return !string.IsNullOrEmpty(HttpContext.Session.GetString("UserId"));
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     
     public IActionResult Index()

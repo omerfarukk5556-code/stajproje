@@ -1,0 +1,1934 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Derleyicisi",
+        "version": "5.6.0.0",
+        "fileVersion": "5.6.0-2.26329.109 (35b593bebfcba58f8e78298cef14c2761f5d86c6)",
+        "semanticVersion": "5.6.0",
+        "language": "tr-TR"
+      },
+      "results": [
+        {
+          "ruleId": "CS8618",
+          "level": "warning",
+          "message": "Null atanamaz özellik 'Users', oluşturucudan çıkış yaparken null olmayan bir değer içermelidir. 'Gerekli' değiştiricisini ekleyin veya özellik değerini null atanabilir olarak bildirmeyi göz önünde bulundurun.",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Models/AppDbContext.cs",
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 16,
+                  "endLine": 7,
+                  "endColumn": 28
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Models/AppDbContext.cs",
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 28,
+                  "endLine": 9,
+                  "endColumn": 33
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS0169",
+          "level": "warning",
+          "message": "'Views_Account_Login.__tagHelperStringValueBuffer' alanı hiçbir zaman kullanılmaz",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/obj/Debug/net10.0/Microsoft.CodeAnalysis.Razor.Compiler/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator/Views/Account/Login_cshtml.g.cs",
+                "region": {
+                  "startLine": 48,
+                  "startColumn": 24,
+                  "endLine": 48,
+                  "endColumn": 52
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 3
+          }
+        },
+        {
+          "ruleId": "CS0169",
+          "level": "warning",
+          "message": "'Views_Home_Index.__tagHelperStringValueBuffer' alanı hiçbir zaman kullanılmaz",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/obj/Debug/net10.0/Microsoft.CodeAnalysis.Razor.Compiler/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator/Views/Home/Index_cshtml.g.cs",
+                "region": {
+                  "startLine": 54,
+                  "startColumn": 24,
+                  "endLine": 54,
+                  "endColumn": 52
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 3
+          }
+        },
+        {
+          "ruleId": "CS0169",
+          "level": "warning",
+          "message": "'Views_Database_Tables.__tagHelperStringValueBuffer' alanı hiçbir zaman kullanılmaz",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/obj/Debug/net10.0/Microsoft.CodeAnalysis.Razor.Compiler/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator/Views/Database/Tables_cshtml.g.cs",
+                "region": {
+                  "startLine": 51,
+                  "startColumn": 24,
+                  "endLine": 51,
+                  "endColumn": 52
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 3
+          }
+        },
+        {
+          "ruleId": "CS0169",
+          "level": "warning",
+          "message": "'Views_Shared__ValidationScriptsPartial.__tagHelperStringValueBuffer' alanı hiçbir zaman kullanılmaz",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/obj/Debug/net10.0/Microsoft.CodeAnalysis.Razor.Compiler/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator/Views/Shared/_ValidationScriptsPartial_cshtml.g.cs",
+                "region": {
+                  "startLine": 43,
+                  "startColumn": 24,
+                  "endLine": 43,
+                  "endColumn": 52
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 3
+          }
+        },
+        {
+          "ruleId": "CS0169",
+          "level": "warning",
+          "message": "'Views_Shared__Layout.__tagHelperStringValueBuffer' alanı hiçbir zaman kullanılmaz",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/obj/Debug/net10.0/Microsoft.CodeAnalysis.Razor.Compiler/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator/Views/Shared/_Layout_cshtml.g.cs",
+                "region": {
+                  "startLine": 58,
+                  "startColumn": 24,
+                  "endLine": 58,
+                  "endColumn": 52
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 3
+          }
+        },
+        {
+          "ruleId": "S1144",
+          "level": "warning",
+          "message": "Remove the unused private method 'IsAuthenticated'.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/HomeController.cs",
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 18,
+                  "endLine": 9,
+                  "endColumn": 33
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S1192",
+          "level": "warning",
+          "message": "Define a constant instead of using this literal 'SelectedTables' 5 times.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 129,
+                  "startColumn": 36,
+                  "endLine": 129,
+                  "endColumn": 52
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 138,
+                  "startColumn": 18,
+                  "endLine": 138,
+                  "endColumn": 34
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 143,
+                  "startColumn": 43,
+                  "endLine": 143,
+                  "endColumn": 59
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 154,
+                  "startColumn": 18,
+                  "endLine": 154,
+                  "endColumn": 34
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 158,
+                  "startColumn": 43,
+                  "endLine": 158,
+                  "endColumn": 59
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": null,
+              "1": null,
+              "2": null,
+              "3": null
+            }
+          }
+        },
+        {
+          "ruleId": "S1144",
+          "level": "warning",
+          "message": "Remove the unused private method 'EscapeIdentifier'.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 476,
+                  "startColumn": 27,
+                  "endLine": 476,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S4487",
+          "level": "warning",
+          "message": "Remove this unread private field '_configuration' or refactor the code to use its value.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 37,
+                  "endLine": 18,
+                  "endColumn": 51
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S1192",
+          "level": "warning",
+          "message": "Define a constant instead of using this literal 'DbConnectionInfo' 5 times.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 35,
+                  "startColumn": 50,
+                  "endLine": 35,
+                  "endColumn": 68
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 67,
+                  "startColumn": 68,
+                  "endLine": 67,
+                  "endColumn": 86
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 355,
+                  "startColumn": 39,
+                  "endLine": 355,
+                  "endColumn": 57
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 362,
+                  "startColumn": 54,
+                  "endLine": 362,
+                  "endColumn": 72
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 427,
+                  "startColumn": 54,
+                  "endLine": 427,
+                  "endColumn": 72
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": null,
+              "1": null,
+              "2": null,
+              "3": null
+            }
+          }
+        },
+        {
+          "ruleId": "S1192",
+          "level": "warning",
+          "message": "Define a constant instead of using this literal 'Timestamp' 4 times.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 28,
+                  "endLine": 110,
+                  "endColumn": 39
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 372,
+                  "startColumn": 173,
+                  "endLine": 372,
+                  "endColumn": 184
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 412,
+                  "startColumn": 55,
+                  "endLine": 412,
+                  "endColumn": 66
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 439,
+                  "startColumn": 47,
+                  "endLine": 439,
+                  "endColumn": 58
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": null,
+              "1": null,
+              "2": null
+            }
+          }
+        },
+        {
+          "ruleId": "S2325",
+          "level": "warning",
+          "message": "Make 'GetConnectionString' a static method.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 24,
+                  "endLine": 13,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S1075",
+          "level": "warning",
+          "message": "Refactor your code not to use hardcoded absolute paths or URIs.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 29,
+                  "endLine": 15,
+                  "endColumn": 90
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S2325",
+          "level": "warning",
+          "message": "Make 'HashPassword' a static method.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 19,
+                  "startColumn": 24,
+                  "endLine": 19,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1872",
+          "level": "note",
+          "message": "'System.BitConverter.ToString(byte[])' tabanlı çağrı zincirleri yerine 'System.Convert.ToHexStringLower(byte[])' tercih edin",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 24,
+                  "startColumn": 24,
+                  "endLine": 24,
+                  "endColumn": 85
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 24,
+                  "startColumn": 24,
+                  "endLine": 24,
+                  "endColumn": 58
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ReplacementPropertiesKey": "ToHexStringLower"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1850",
+          "level": "note",
+          "message": "'ComputeHash' yerine statik 'System.Security.Cryptography.SHA256.HashData' yöntemini tercih edin",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 23,
+                  "startColumn": 35,
+                  "endLine": 23,
+                  "endColumn": 87
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 21,
+                  "startColumn": 24,
+                  "endLine": 21,
+                  "endColumn": 48
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ComputeTypePropertyKey": "ComputeHash",
+              "DeleteHashCreationPropertyKey": "DeleteHashCreationPropertyKey",
+              "HashCreationIndexPropertyKey": "0",
+              "TargetHashTypeDiagnosticPropertyKey": "SHA256"
+            }
+          }
+        },
+        {
+          "ruleId": "S6966",
+          "level": "warning",
+          "message": "Await RunAsync instead.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Program.cs",
+                "region": {
+                  "startLine": 59,
+                  "startColumn": 1,
+                  "endLine": 59,
+                  "endColumn": 10
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S2486",
+          "level": "warning",
+          "message": "Handle the exception or explain in a comment why it can be ignored.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 9,
+                  "endLine": 110,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S3776",
+          "level": "warning",
+          "message": "Refactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 49,
+                  "startColumn": 38,
+                  "endLine": 49,
+                  "endColumn": 45
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 55,
+                  "startColumn": 13,
+                  "endLine": 55,
+                  "endColumn": 15
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 55,
+                  "startColumn": 47,
+                  "endLine": 55,
+                  "endColumn": 49
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 57,
+                  "startColumn": 17,
+                  "endLine": 57,
+                  "endColumn": 19
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 61,
+                  "startColumn": 17,
+                  "endLine": 61,
+                  "endColumn": 21
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 64,
+                  "startColumn": 82,
+                  "endLine": 64,
+                  "endColumn": 83
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 65,
+                  "startColumn": 88,
+                  "endLine": 65,
+                  "endColumn": 89
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 66,
+                  "startColumn": 21,
+                  "endLine": 66,
+                  "endColumn": 23
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 70,
+                  "startColumn": 21,
+                  "endLine": 70,
+                  "endColumn": 25
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 84,
+                  "startColumn": 17,
+                  "endLine": 84,
+                  "endColumn": 22
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 89,
+                  "startColumn": 13,
+                  "endLine": 89,
+                  "endColumn": 17
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 94,
+                  "startColumn": 9,
+                  "endLine": 94,
+                  "endColumn": 14
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 107,
+                  "startColumn": 13,
+                  "endLine": 107,
+                  "endColumn": 15
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 9,
+                  "endLine": 110,
+                  "endColumn": 14
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 114,
+                  "startColumn": 9,
+                  "endLine": 114,
+                  "endColumn": 11
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "+1",
+              "1": "+1",
+              "10": "+1",
+              "11": "+1",
+              "12": "+1",
+              "13": "+1",
+              "2": "+2 (incl 1 for nesting)",
+              "3": "+1",
+              "4": "+3 (incl 2 for nesting)",
+              "5": "+3 (incl 2 for nesting)",
+              "6": "+3 (incl 2 for nesting)",
+              "7": "+1",
+              "8": "+2 (incl 1 for nesting)",
+              "9": "+1"
+            }
+          }
+        },
+        {
+          "ruleId": "S2486",
+          "level": "warning",
+          "message": "Handle the exception or explain in a comment why it can be ignored.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 145,
+                  "startColumn": 9,
+                  "endLine": 145,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S108",
+          "level": "warning",
+          "message": "Either remove or fill this block of code.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 15,
+                  "endLine": 110,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S108",
+          "level": "warning",
+          "message": "Either remove or fill this block of code.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 145,
+                  "startColumn": 15,
+                  "endLine": 145,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S2486",
+          "level": "warning",
+          "message": "Handle the exception or explain in a comment why it can be ignored.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 160,
+                  "startColumn": 9,
+                  "endLine": 160,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6967",
+          "level": "warning",
+          "message": "ModelState.IsValid should be checked in controller actions.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 135,
+                  "startColumn": 26,
+                  "endLine": 135,
+                  "endColumn": 38
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S108",
+          "level": "warning",
+          "message": "Either remove or fill this block of code.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 160,
+                  "startColumn": 15,
+                  "endLine": 160,
+                  "endColumn": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1822",
+          "level": "note",
+          "message": "'GetConnectionString' adlı üye örnek verilerine erişmiyor ve statik olarak işaretlenebilir",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 24,
+                  "endLine": 13,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1822",
+          "level": "note",
+          "message": "'HashPassword' adlı üye örnek verilerine erişmiyor ve statik olarak işaretlenebilir",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/AccountController.cs",
+                "region": {
+                  "startLine": 19,
+                  "startColumn": 24,
+                  "endLine": 19,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6967",
+          "level": "warning",
+          "message": "ModelState.IsValid should be checked in controller actions.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 151,
+                  "startColumn": 26,
+                  "endLine": 151,
+                  "endColumn": 42
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6967",
+          "level": "warning",
+          "message": "ModelState.IsValid should be checked in controller actions.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 49,
+                  "startColumn": 38,
+                  "endLine": 49,
+                  "endColumn": 45
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S3776",
+          "level": "warning",
+          "message": "Refactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 101,
+                  "startColumn": 38,
+                  "endLine": 101,
+                  "endColumn": 57
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 118,
+                  "startColumn": 17,
+                  "endLine": 118,
+                  "endColumn": 19
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 129,
+                  "startColumn": 17,
+                  "endLine": 129,
+                  "endColumn": 19
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 140,
+                  "startColumn": 17,
+                  "endLine": 140,
+                  "endColumn": 22
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 159,
+                  "startColumn": 17,
+                  "endLine": 159,
+                  "endColumn": 19
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 159,
+                  "startColumn": 38,
+                  "endLine": 159,
+                  "endColumn": 40
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 165,
+                  "startColumn": 13,
+                  "endLine": 165,
+                  "endColumn": 15
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 168,
+                  "startColumn": 17,
+                  "endLine": 168,
+                  "endColumn": 19
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 170,
+                  "startColumn": 17,
+                  "endLine": 170,
+                  "endColumn": 21
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 172,
+                  "startColumn": 17,
+                  "endLine": 172,
+                  "endColumn": 21
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 181,
+                  "startColumn": 13,
+                  "endLine": 181,
+                  "endColumn": 15
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 189,
+                  "startColumn": 13,
+                  "endLine": 189,
+                  "endColumn": 20
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 197,
+                  "startColumn": 13,
+                  "endLine": 197,
+                  "endColumn": 20
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 200,
+                  "startColumn": 13,
+                  "endLine": 200,
+                  "endColumn": 18
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 206,
+                  "startColumn": 17,
+                  "endLine": 206,
+                  "endColumn": 20
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 209,
+                  "startColumn": 54,
+                  "endLine": 209,
+                  "endColumn": 55
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 216,
+                  "startColumn": 13,
+                  "endLine": 216,
+                  "endColumn": 15
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 219,
+                  "startColumn": 17,
+                  "endLine": 219,
+                  "endColumn": 20
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 223,
+                  "startColumn": 21,
+                  "endLine": 223,
+                  "endColumn": 28
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 227,
+                  "startColumn": 13,
+                  "endLine": 227,
+                  "endColumn": 17
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 235,
+                  "startColumn": 9,
+                  "endLine": 235,
+                  "endColumn": 14
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "+1",
+              "1": "+1",
+              "10": "+1",
+              "11": "+1",
+              "12": "+1",
+              "13": "+2 (incl 1 for nesting)",
+              "14": "+3 (incl 2 for nesting)",
+              "15": "+1",
+              "16": "+2 (incl 1 for nesting)",
+              "17": "+3 (incl 2 for nesting)",
+              "18": "+1",
+              "19": "+1",
+              "2": "+1",
+              "3": "+1",
+              "4": "+1",
+              "5": "+1",
+              "6": "+2 (incl 1 for nesting)",
+              "7": "+1",
+              "8": "+1",
+              "9": "+1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA1825",
+          "level": "note",
+          "message": "Gereksiz sıfır uzunluklu dizi ayırmaları kullanmayın.  Bunun yerine Array.Empty<string>() kullanın.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 340,
+                  "startColumn": 72,
+                  "endLine": 340,
+                  "endColumn": 85
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1825",
+          "level": "note",
+          "message": "Gereksiz sıfır uzunluklu dizi ayırmaları kullanmayın.  Bunun yerine Array.Empty<string>() kullanın.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 344,
+                  "startColumn": 44,
+                  "endLine": 344,
+                  "endColumn": 57
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6608",
+          "level": "warning",
+          "message": "Indexing at Count-1 should be used instead of the \"Enumerable\" extension method \"Last\"",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 388,
+                  "startColumn": 67,
+                  "endLine": 388,
+                  "endColumn": 71
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S2077",
+          "level": "warning",
+          "message": "Use a parameterized query instead of string formatting.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 302,
+                  "startColumn": 33,
+                  "endLine": 302,
+                  "endColumn": 62
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 293,
+                  "startColumn": 24,
+                  "endLine": 293,
+                  "endColumn": 30
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "SQL Query is dynamically formatted and assigned to sqlAll."
+            }
+          }
+        },
+        {
+          "ruleId": "CA1869",
+          "level": "note",
+          "message": "Her serileştirme işlemi için yeni bir 'JsonSerializerOptions' örneği oluşturmaktan kaçının. Bunun yerine örnekleri önbelleğe alıp yeniden kullanın.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 98,
+                  "endLine": 183,
+                  "endColumn": 162
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6967",
+          "level": "warning",
+          "message": "ModelState.IsValid should be checked in controller actions.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DatabaseController.cs",
+                "region": {
+                  "startLine": 173,
+                  "startColumn": 26,
+                  "endLine": 173,
+                  "endColumn": 49
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S2077",
+          "level": "warning",
+          "message": "Use a parameterized query instead of string formatting.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 155,
+                  "startColumn": 35,
+                  "endLine": 155,
+                  "endColumn": 69
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 153,
+                  "startColumn": 20,
+                  "endLine": 153,
+                  "endColumn": 32
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "SQL Query is dynamically formatted and assigned to batchDateSql."
+            }
+          }
+        },
+        {
+          "ruleId": "S2077",
+          "level": "warning",
+          "message": "Use a parameterized query instead of string formatting.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 179,
+                  "startColumn": 29,
+                  "endLine": 179,
+                  "endColumn": 54
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 177,
+                  "startColumn": 17,
+                  "endLine": 177,
+                  "endColumn": 20
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "SQL Query is dynamically formatted and assigned to sql."
+            }
+          }
+        },
+        {
+          "ruleId": "S6608",
+          "level": "warning",
+          "message": "Indexing at Count-1 should be used instead of the \"Enumerable\" extension method \"Last\"",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 287,
+                  "startColumn": 102,
+                  "endLine": 287,
+                  "endColumn": 106
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1847",
+          "level": "note",
+          "message": "Tek bir karakter ararken 'string.Contains(string)' yerine 'string.Contains(char)' kullanın",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 388,
+                  "startColumn": 43,
+                  "endLine": 388,
+                  "endColumn": 46
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S2077",
+          "level": "warning",
+          "message": "Use a parameterized query instead of string formatting.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 451,
+                  "startColumn": 29,
+                  "endLine": 451,
+                  "endColumn": 54
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 449,
+                  "startColumn": 17,
+                  "endLine": 449,
+                  "endColumn": 20
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "SQL Query is dynamically formatted and assigned to sql."
+            }
+          }
+        },
+        {
+          "ruleId": "S1481",
+          "level": "warning",
+          "message": "Remove the unused local variable 'colsList'.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/omer/Desktop/staj%20proje/StajWebProjesi/Controllers/DataController.cs",
+                "region": {
+                  "startLine": 441,
+                  "startColumn": 13,
+                  "endLine": 441,
+                  "endColumn": 21
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        }
+      ],
+      "rules": {
+        "CA1822": {
+          "id": "CA1822",
+          "shortDescription": "Üyeleri statik olarak işaretleyin",
+          "fullDescription": "Örnek verilerine erişmeyen veya örnek yöntemlerini çağırmayan üyeler statik olarak işaretlenebilir. Yöntemleri statik olarak işaretledikten sonra, derleyici bu üyelere yönelik sanal olmayan çağrı konumlarını gösterir. Bu, performans açısından duyarlı kod için önemli ölçüde performans kazanımı sağlar.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1822",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "PortedFromFxCop",
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1825": {
+          "id": "CA1825",
+          "shortDescription": "Sıfır uzunluklu dizi ayırmaları kullanmaktan kaçının",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1825",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1847": {
+          "id": "CA1847",
+          "shortDescription": "Tek bir karakter araması için sabit değerli karakter kullanın",
+          "fullDescription": "'string.Contains(char)' tek karakter araması için daha iyi performanslı bir aşırı yükleme olarak kullanılabilir.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1847",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1850": {
+          "id": "CA1850",
+          "shortDescription": "'ComputeHash' yerine statik 'HashData' yöntemini tercih edin",
+          "fullDescription": "'ComputeHash' çağırmak için HashAlgorithm örneği oluşturup yönetmek yerine statik 'HashData' yöntemini kullanmak daha verimlidir.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1850",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1869": {
+          "id": "CA1869",
+          "shortDescription": "'JsonSerializerOptions' örneklerini önbelleğe alıp yeniden kullanma",
+          "fullDescription": "Her serileştirme işlemi için yeni bir 'JsonSerializerOptions' örneği oluşturmaktan kaçının. Bunun yerine örnekleri önbelleğe alıp yeniden kullanın. Tek kullanımlık 'JsonSerializerOptions' örnekleri uygulamanızın performansını önemli ölçüde düşürebilir.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1869",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1872": {
+          "id": "CA1872",
+          "shortDescription": "'BitConverter.ToString' tabanlı çağrı zincirleri yerine 'Convert.ToHexString' ve 'Convert.ToHexStringLower' tercih edin",
+          "fullDescription": "Baytları onaltılık dize gösterimine kodlarken 'Convert.ToHexString' veya 'Convert.ToHexStringLower' kullanın. Bu yöntemler, tireleri değiştirmek için 'String.Replace' ve 'String.ToLower' ile birlikte 'BitConverter.ToString' kullanmaktan daha verimlidir ve ayırmaya uygundur.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1872",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CS0169": {
+          "id": "CS0169",
+          "shortDescription": "Alan hiç kullanılmadı",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS0169)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "CS8618": {
+          "id": "CS8618",
+          "shortDescription": "Null atanamaz alan, oluşturucudan çıkış yaparken null olmayan bir değer içermelidir. 'Gerekli' değiştiricisini ekleyin veya null atanabilir olarak bildirmeyi göz önünde bulundurun.",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS8618)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "S1075": {
+          "id": "S1075",
+          "shortDescription": "URIs should not be hardcoded",
+          "fullDescription": "Hard-coding a URI makes it difficult to test a program for a variety of reasons:",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S108": {
+          "id": "S108",
+          "shortDescription": "Nested blocks of code should not be left empty",
+          "fullDescription": "An empty code block is confusing. It will require some effort from maintainers to determine if it is intentional or indicates the implementation is incomplete.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S1144": {
+          "id": "S1144",
+          "shortDescription": "Unused private types or members should be removed",
+          "fullDescription": "This rule raises an issue when a private/internal type or member is never referenced in the code.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S1192": {
+          "id": "S1192",
+          "shortDescription": "String literals should not be duplicated",
+          "fullDescription": "Duplicated string literals make the process of refactoring complex and error-prone, as any change would need to be propagated on all occurrences.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": false,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S1481": {
+          "id": "S1481",
+          "shortDescription": "Unused local variables should be removed",
+          "fullDescription": "An unused local variable is a variable that has been declared but is not used anywhere in the block of code where it is defined. It is dead code, contributing to unnecessary complexity and leading to confusion when reading the code. Therefore, it should be removed from your code to maintain clarity and efficiency.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S2077": {
+          "id": "S2077",
+          "shortDescription": "SQL queries should not be dynamically formatted",
+          "fullDescription": "Dynamically building SQL query strings can result in broken SQL syntax and open SQL injection attacks.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Vulnerability",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S2325": {
+          "id": "S2325",
+          "shortDescription": "Methods and properties that don't access instance data should be static",
+          "fullDescription": "Methods and properties that don’t access instance data should be marked as static for the following reasons:",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S2486": {
+          "id": "S2486",
+          "shortDescription": "Generic exceptions should not be ignored",
+          "fullDescription": "When exceptions occur, it is usually a bad idea to simply ignore them. Instead, it is better to handle them properly, or at least to log them.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S3776": {
+          "id": "S3776",
+          "shortDescription": "Cognitive Complexity of methods should not be too high",
+          "fullDescription": "This rule raises an issue when the code cognitive complexity of a function is above a certain threshold.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Critical Code Smell",
+            "isEnabledByDefault": false,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S4487": {
+          "id": "S4487",
+          "shortDescription": "Unread \"private\" fields should be removed",
+          "fullDescription": "Private fields which are written but never read are a case of \"dead store\". Changing the value of such a field is useless and most probably indicates an error in the code.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Critical Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6608": {
+          "id": "S6608",
+          "shortDescription": "Prefer indexing instead of \"Enumerable\" methods on types implementing \"IList\"",
+          "fullDescription": "Indexes in C# provide direct access to an element at a specific position within an array or collection. When compared to Enumerable methods, indexing can be more efficient for certain scenarios, such as iterating over a large collection, due to avoiding the overhead of checking the underlying collection type before accessing it.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6966": {
+          "id": "S6966",
+          "shortDescription": "Awaitable method should be used",
+          "fullDescription": "In an async method, any blocking operations should be avoided.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6967": {
+          "id": "S6967",
+          "shortDescription": "ModelState.IsValid should be called in controller actions",
+          "fullDescription": "In the context of ASP.NET Core MVC web applications, both model binding and model validation are processes that take place prior to the execution of a controller action. It is imperative for the application to examine the ModelState.IsValid and respond accordingly.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Critical Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

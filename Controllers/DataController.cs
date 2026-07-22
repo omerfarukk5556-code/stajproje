@@ -15,24 +15,28 @@ using Microsoft.AspNetCore.Authorization;
 public class DataController : ControllerBase
 
 {
-    private readonly IConfiguration _configuration;
+    // Constants
+    private const string SessionKeyDbConnectionInfo = "DbConnectionInfo";
+    private const string SessionKeyDbConnectionString = "DbConnectionString";
+    private const string TimestampColumnName = "Timestamp";
 
-    public DataController(IConfiguration configuration)
+    // Reusable JSON options
+    private static readonly JsonSerializerOptions CaseInsensitiveJsonOptions = new()
     {
-        _configuration = configuration;
-    }
+        PropertyNameCaseInsensitive = true
+    };
 
     private string? GetConnectionString()
     {
         // Önce doğrudan kaydedilen connection string'i dene
-        var connStr = HttpContext.Session.GetString("DbConnectionString");
+        var connStr = HttpContext.Session.GetString(SessionKeyDbConnectionString);
         if (!string.IsNullOrEmpty(connStr))
         {
             return connStr;
         }
         
         // Fallback: JSON'dan deserialize et
-        var conn = HttpContext.Session.GetString("DbConnectionInfo");
+        var conn = HttpContext.Session.GetString(SessionKeyDbConnectionInfo);
         if (string.IsNullOrEmpty(conn))
         {
             throw new InvalidOperationException("LÜTFEN ÖNCE BAĞLANTI MODALINI KULLANIN.");
@@ -63,8 +67,8 @@ public class DataController : ControllerBase
     {
         try
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("DbConnectionString")) &&
-                string.IsNullOrEmpty(HttpContext.Session.GetString("DbConnectionInfo")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeyDbConnectionString)) &&
+                string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeyDbConnectionInfo)))
             {
                 return BadRequest(new { error = "Önce veritabanına bağlanın." });
             }
@@ -106,74 +110,22 @@ public class DataController : ControllerBase
             using var conn = new SqlConnection(connectionString);
             await conn.OpenAsync();
 
-            // Timestamp kolonunu otomatik bul
-            string tsCol = "Timestamp";
-            string findTsSql = @"SELECT TOP 1 COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
-                                 WHERE TABLE_NAME = 'HIST_TREND' 
-                                 AND DATA_TYPE IN ('datetime','datetime2','date','smalldatetime')
-                                 ORDER BY ORDINAL_POSITION";
-            using (var cmdTs = new SqlCommand(findTsSql, conn))
-            {
-                var tsResult = await cmdTs.ExecuteScalarAsync();
-                if (tsResult != null) tsCol = tsResult.ToString()!;
-            }
-
-            // HIST_TREND tablosunda BATCH_ID kolonunun adını bul (BATCH_ID veya BATCHID olabilir)
-            string batchCol = "BATCH_ID";
-            string findBatchSql = @"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
-                                    WHERE TABLE_NAME = 'HIST_TREND' 
-                                    AND COLUMN_NAME LIKE '%BATCH%'";
-            using (var cmdB = new SqlCommand(findBatchSql, conn))
-            {
-                var batchResult = await cmdB.ExecuteScalarAsync();
-                if (batchResult != null) batchCol = batchResult.ToString()!;
-            }
-
-            // Tabloda gerçekten var olan kolonları bul (olmayanları atla)
-            var requestedCols = columns.Split(',').Select(c => c.Trim()).ToList();
-            string findExistingSql = @"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
-                                       WHERE TABLE_NAME = 'HIST_TREND'";
-            var existingCols = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            using (var cmdEx = new SqlCommand(findExistingSql, conn))
-            {
-                using var readerEx = await cmdEx.ExecuteReaderAsync();
-                while (await readerEx.ReadAsync())
-                    existingCols.Add(readerEx.GetString(0));
-            }
-
-            // Timestamp kolonunu ekle
-            existingCols.Add(tsCol);
-            existingCols.Add(batchCol);
-
-            var validCols = requestedCols.Where(c => existingCols.Contains(c)).ToList();
-            var colList = validCols.Select(c => $"[{c}]").ToList();
-            var selectCols = string.Join(", ", colList);
-
-            // Batch'in EN SONU tarihini bul (en yeni veriden geriye doğru)
-            string batchDateSql = $"SELECT MAX([{tsCol}]) FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId";
-            DateTime? batchEndDate = null;
-            using (var cmdBatch = new SqlCommand(batchDateSql, conn))
-            {
-                cmdBatch.Parameters.AddWithValue("@batchId", batchId);
-                var tsResult = await cmdBatch.ExecuteScalarAsync();
-                if (tsResult != null && tsResult != DBNull.Value)
-                    batchEndDate = (DateTime)tsResult;
-            }
-
-            // Zaman aralığı filtresi - en son tarihten geriye doğru
-            string timeFilter = "";
-            if (batchEndDate.HasValue)
-            {
-                // daily: yearCount × 1 gün geriye, monthly: yearCount × 1 ay geriye, yearly: yearCount × 1 yıl geriye
-                if (timeRange == "daily")
-                    timeFilter = $" AND [{tsCol}] >= DATEADD(day, -{yearCount}, @batchEnd) AND [{tsCol}] <= @batchEnd";
-                else if (timeRange == "monthly")
-                    timeFilter = $" AND [{tsCol}] >= DATEADD(month, -{yearCount}, @batchEnd) AND [{tsCol}] <= @batchEnd";
-                else if (timeRange == "yearly")
-                    timeFilter = $" AND [{tsCol}] >= DATEADD(year, -{yearCount}, @batchEnd) AND [{tsCol}] <= @batchEnd";
-            }
-
-            // ASC sıralama: en eski veri en başta (kronolojik)
+            // 1. Timestamp kolonunu otomatik bul
+            var tsCol = await FindTimestampColumnAsync(conn);
+            
+            // 2. Batch ID kolonunu bul
+            var batchCol = await FindBatchIdColumnAsync(conn);
+            
+            // 3. Mevcut kolonları keşfet ve geçerli olanları filtrele
+            var (requestedCols, validCols, colList, selectCols) = await FilterValidColumnsAsync(conn, columns, tsCol, batchCol);
+            
+            // 4. Batch'in EN SONU tarihini bul
+            var batchEndDate = await GetBatchEndDateAsync(conn, batchCol, batchId, tsCol);
+            
+            // 5. Zaman aralığı filtresini oluştur
+            var timeFilter = BuildTimeFilter(tsCol, batchEndDate, timeRange, yearCount);
+            
+            // 6. Sorguyu oluştur ve çalıştır
             var sql = $"SELECT [{tsCol}], {selectCols} FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId{timeFilter} ORDER BY [{tsCol}] ASC";
             
             using var cmd = new SqlCommand(sql, conn);
@@ -181,61 +133,152 @@ public class DataController : ControllerBase
             if (batchEndDate.HasValue)
                 cmd.Parameters.AddWithValue("@batchEnd", batchEndDate.Value);
 
-            using var reader = await cmd.ExecuteReaderAsync();
-            var labels = new List<string>();
-            var seriesData = new Dictionary<string, List<double>>();
+            // 7. Veriyi çek ve seyrelt
+            var result = await ReadAndSampleSeriesAsync(cmd, requestedCols, validCols, colList);
             
-            // Tüm istenen kolonları başlat
-            foreach (var col in requestedCols)
-            {
-                seriesData[col] = new List<double>();
-            }
-
-            // Tüm kayıtları çek
-            var allLabels = new List<string>();
-            var allSeries = new Dictionary<string, List<double>>();
-            foreach (var col in requestedCols)
-                allSeries[col] = new List<double>();
-            
-            while (await reader.ReadAsync())
-            {
-                var dt = reader.GetDateTime(0);
-                // Tüm modlarda tarih yazmalı (gün/ay/yıl saat)
-                string label = dt.ToString("dd.MM.yyyy HH:mm");
-                allLabels.Add(label);
-                for (int i = 0; i < colList.Count; i++)
-                {
-                    var colName = validCols[i];
-                    var val = reader.IsDBNull(i + 1) ? double.NaN : Convert.ToDouble(reader.GetValue(i + 1));
-                    allSeries[colName].Add(val);
-                }
-            }
-
-            // Çok fazla veri varsa grafik için seyrelt (sampling)
-            const int maxPoints = 500;
-            if (allLabels.Count > maxPoints)
-            {
-                double step = (double)allLabels.Count / maxPoints;
-                for (int i = 0; i < maxPoints; i++)
-                {
-                    int idx = Math.Min((int)(i * step), allLabels.Count - 1);
-                    labels.Add(allLabels[idx]);
-                    foreach (var col in validCols)
-                        seriesData[col].Add(allSeries[col][idx]);
-                }
-            }
-            else
-            {
-                labels = allLabels;
-                seriesData = allSeries;
-            }
-
-            return Ok(new { labels, series = seriesData, meta = new { timeRange, yearCount, totalRecords = allLabels.Count, batchEnd = batchEndDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? "null" } });
+            return Ok(new { 
+                labels = result.Labels, 
+                series = result.Series, 
+                meta = new { timeRange, yearCount, totalRecords = result.TotalRecords, batchEnd = batchEndDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? "null" } 
+            });
         }
         catch (Exception ex)
         {
             return BadRequest(new { error = ex.Message });
         }
+    }
+
+    // --- Refactored helper methods to reduce cognitive complexity ---
+
+    private static async Task<string> FindTimestampColumnAsync(SqlConnection conn)
+    {
+        var tsCol = TimestampColumnName;
+        string findTsSql = @"SELECT TOP 1 COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+                             WHERE TABLE_NAME = 'HIST_TREND' 
+                             AND DATA_TYPE IN ('datetime','datetime2','date','smalldatetime')
+                             ORDER BY ORDINAL_POSITION";
+        using (var cmdTs = new SqlCommand(findTsSql, conn))
+        {
+            var tsResult = await cmdTs.ExecuteScalarAsync();
+            if (tsResult != null) tsCol = tsResult.ToString()!;
+        }
+        return tsCol;
+    }
+
+    private static async Task<string> FindBatchIdColumnAsync(SqlConnection conn)
+    {
+        var batchCol = "BATCH_ID";
+        string findBatchSql = @"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+                                WHERE TABLE_NAME = 'HIST_TREND' 
+                                AND COLUMN_NAME LIKE '%BATCH%'";
+        using (var cmdB = new SqlCommand(findBatchSql, conn))
+        {
+            var batchResult = await cmdB.ExecuteScalarAsync();
+            if (batchResult != null) batchCol = batchResult.ToString()!;
+        }
+        return batchCol;
+    }
+
+    private static async Task<(List<string> Requested, List<string> Valid, List<string> ColList, string SelectCols)> FilterValidColumnsAsync(SqlConnection conn, string columns, string tsCol, string batchCol)
+    {
+        var requestedCols = columns.Split(',').Select(c => c.Trim()).ToList();
+        string findExistingSql = @"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+                                   WHERE TABLE_NAME = 'HIST_TREND'";
+        var existingCols = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        using (var cmdEx = new SqlCommand(findExistingSql, conn))
+        {
+            using var readerEx = await cmdEx.ExecuteReaderAsync();
+            while (await readerEx.ReadAsync())
+                existingCols.Add(readerEx.GetString(0));
+        }
+
+        existingCols.Add(tsCol);
+        existingCols.Add(batchCol);
+
+        var validCols = requestedCols.Where(c => existingCols.Contains(c)).ToList();
+        var colList = validCols.Select(c => $"[{c}]").ToList();
+        var selectCols = string.Join(", ", colList);
+        return (requestedCols, validCols, colList, selectCols);
+    }
+
+    private static async Task<DateTime?> GetBatchEndDateAsync(SqlConnection conn, string batchCol, int batchId, string tsCol)
+    {
+        DateTime? batchEndDate = null;
+        string batchDateSql = $"SELECT MAX([{tsCol}]) FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId";
+        using (var cmdBatch = new SqlCommand(batchDateSql, conn))
+        {
+            cmdBatch.Parameters.AddWithValue("@batchId", batchId);
+            var tsResult = await cmdBatch.ExecuteScalarAsync();
+            if (tsResult != null && tsResult != DBNull.Value)
+                batchEndDate = (DateTime)tsResult;
+        }
+        return batchEndDate;
+    }
+
+    private static string BuildTimeFilter(string tsCol, DateTime? batchEndDate, string timeRange, int yearCount)
+    {
+        if (!batchEndDate.HasValue) return "";
+        
+        string datePart = timeRange switch
+        {
+            "daily" => "day",
+            "monthly" => "month",
+            "yearly" => "year",
+            _ => "day"
+        };
+        
+        return $" AND [{tsCol}] >= DATEADD({datePart}, -{yearCount}, @batchEnd) AND [{tsCol}] <= @batchEnd";
+    }
+
+    private record SeriesResult(List<string> Labels, Dictionary<string, List<double>> Series, int TotalRecords);
+
+    private static async Task<SeriesResult> ReadAndSampleSeriesAsync(SqlCommand cmd, List<string> requestedCols, List<string> validCols, List<string> colList)
+    {
+        using var reader = await cmd.ExecuteReaderAsync();
+        
+        var allLabels = new List<string>();
+        var allSeries = new Dictionary<string, List<double>>();
+        foreach (var col in requestedCols)
+            allSeries[col] = new List<double>();
+        
+        while (await reader.ReadAsync())
+        {
+            var dt = reader.GetDateTime(0);
+            string label = dt.ToString("dd.MM.yyyy HH:mm");
+            allLabels.Add(label);
+            for (int i = 0; i < colList.Count; i++)
+            {
+                var colName = validCols[i];
+                var val = reader.IsDBNull(i + 1) ? double.NaN : Convert.ToDouble(reader.GetValue(i + 1));
+                allSeries[colName].Add(val);
+            }
+        }
+
+        // Sampling
+        const int maxPoints = 500;
+        List<string> labels;
+        Dictionary<string, List<double>> seriesData;
+
+        if (allLabels.Count > maxPoints)
+        {
+            labels = new List<string>(maxPoints);
+            seriesData = requestedCols.ToDictionary(c => c, _ => new List<double>(maxPoints));
+            double step = (double)allLabels.Count / maxPoints;
+            for (int i = 0; i < maxPoints; i++)
+            {
+                int idx = Math.Min((int)(i * step), allLabels.Count - 1);
+                labels.Add(allLabels[idx]);
+                foreach (var col in validCols)
+                    seriesData[col].Add(allSeries[col][idx]);
+            }
+        }
+        else
+        {
+            labels = allLabels;
+            seriesData = allSeries;
+        }
+
+        return new SeriesResult(labels, seriesData, allLabels.Count);
     }
 
     [HttpGet("GetBatchComparison")]
@@ -245,48 +288,22 @@ public class DataController : ControllerBase
         {
             var connectionString = GetConnectionString() ?? throw new InvalidOperationException("Bağlantı bilgisi bulunamadı.");
 
-            // Her sorgu için ayrı bağlantı açarak DataReader çakışmasını önle
+            // 1. BATCH_MASTER konsimento kolonlarını keşfet
+            var bmCols = await GetBmKonsimentoColumnsAsync(connectionString);
             
-            // 1. BATCH_MASTER kolonlarını keşfet
-            List<string> bmCols;
-            using (var conn1 = new SqlConnection(connectionString))
-            {
-                await conn1.OpenAsync();
-                var cmd = new SqlCommand("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'BATCH_MASTER' AND (COLUMN_NAME LIKE '%KONSIMENTO%' OR COLUMN_NAME LIKE '%CONSENT%')", conn1);
-                using var reader = await cmd.ExecuteReaderAsync();
-                bmCols = new List<string>();
-                while (await reader.ReadAsync()) bmCols.Add(reader.GetString(0));
-            }
-
             // 2. HIST_TREND kolonlarını keşfet
-            List<string> htCols;
-            using (var conn2 = new SqlConnection(connectionString))
-            {
-                await conn2.OpenAsync();
-                var cmd = new SqlCommand("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'HIST_TREND'", conn2);
-                using var reader = await cmd.ExecuteReaderAsync();
-                htCols = new List<string>();
-                while (await reader.ReadAsync()) htCols.Add(reader.GetString(0));
-            }
-
+            var htCols = await GetHtColumnsAsync(connectionString);
+            
             // 3. Batch ID kolonunu keşfet
-            string batchCol = "BATCH_ID";
-            using (var conn3 = new SqlConnection(connectionString))
-            {
-                await conn3.OpenAsync();
-                var cmd = new SqlCommand("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'HIST_TREND' AND COLUMN_NAME LIKE '%BATCH%'", conn3);
-                using var reader = await cmd.ExecuteReaderAsync();
-                if (await reader.ReadAsync())
-                    batchCol = reader.GetString(0);
-            }
+            var batchCol = await GetBatchColFromHtAsync(connectionString);
 
             // 4. Kolon isimlerini belirle
             string konsVolCol = bmCols.FirstOrDefault(c => c.Contains("VOLUME")) ?? bmCols.FirstOrDefault(c => c.Contains("GSV")) ?? "KONSIMENTO_VOLUME";
             string konsMassCol = bmCols.FirstOrDefault(c => c.Contains("MASS") || c.Contains("WEIGHT")) ?? "KONSIMENTO_MASS";
             string gsColName = htCols.FirstOrDefault(c => c == "GS") ?? htCols.FirstOrDefault() ?? "GS";
-            string massColName = htCols.Count > 1 ? htCols.LastOrDefault(c => c == "MASS") ?? htCols.Last() : htCols.FirstOrDefault(c => c != gsColName) ?? "MASS";
+            string massColName = htCols.Count > 1 ? htCols.LastOrDefault(c => c == "MASS") ?? htCols[^1] : htCols.FirstOrDefault(c => c != gsColName) ?? "MASS";
 
-            // 5. Tek sorgu ile tüm değerleri al (ayrı bağlantı)
+            // 5. Tek sorgu ile tüm değerleri al
             using (var conn4 = new SqlConnection(connectionString))
             {
                 await conn4.OpenAsync();
@@ -331,17 +348,52 @@ public class DataController : ControllerBase
         }
     }
 
+    // --- Helper methods for GetBatchComparison to reduce complexity ---
+
+    private static async Task<List<string>> GetBmKonsimentoColumnsAsync(string connectionString)
+    {
+        using var conn = new SqlConnection(connectionString);
+        await conn.OpenAsync();
+        var cmd = new SqlCommand("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'BATCH_MASTER' AND (COLUMN_NAME LIKE '%KONSIMENTO%' OR COLUMN_NAME LIKE '%CONSENT%')", conn);
+        using var reader = await cmd.ExecuteReaderAsync();
+        var cols = new List<string>();
+        while (await reader.ReadAsync()) cols.Add(reader.GetString(0));
+        return cols;
+    }
+
+    private static async Task<List<string>> GetHtColumnsAsync(string connectionString)
+    {
+        using var conn = new SqlConnection(connectionString);
+        await conn.OpenAsync();
+        var cmd = new SqlCommand("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'HIST_TREND'", conn);
+        using var reader = await cmd.ExecuteReaderAsync();
+        var cols = new List<string>();
+        while (await reader.ReadAsync()) cols.Add(reader.GetString(0));
+        return cols;
+    }
+
+    private static async Task<string> GetBatchColFromHtAsync(string connectionString)
+    {
+        using var conn = new SqlConnection(connectionString);
+        await conn.OpenAsync();
+        var cmd = new SqlCommand("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'HIST_TREND' AND COLUMN_NAME LIKE '%BATCH%'", conn);
+        using var reader = await cmd.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+            return reader.GetString(0);
+        return "BATCH_ID";
+    }
+
     [HttpGet("SelectedTables")]
     public IActionResult SelectedTables()
     {
         try
         {
             var json = HttpContext.Session.GetString("SelectedTables");
-            if (string.IsNullOrEmpty(json)) return Ok(new { selected = new string[0] });
+            if (string.IsNullOrEmpty(json)) return Ok(new { selected = Array.Empty<string>() });
             var arr = JsonSerializer.Deserialize<string[]>(json) ?? Array.Empty<string>();
             return Ok(new { selected = arr });
         }
-        catch { return Ok(new { selected = new string[0] }); }
+        catch { return Ok(new { selected = Array.Empty<string>() }); }
     }
     
     [HttpPost("Connect")]
@@ -352,14 +404,14 @@ public class DataController : ControllerBase
             info.ConnectionString = $"Server={info.Server};Database={info.Database};Trusted_Connection=True;TrustServerCertificate=True;";
         }
         
-        HttpContext.Session.SetString("DbConnectionInfo", JsonSerializer.Serialize(info));
+        HttpContext.Session.SetString(SessionKeyDbConnectionInfo, JsonSerializer.Serialize(info));
         return Ok();
     }
 
     [HttpGet("TableColumns")]
     public async Task<IActionResult> TableColumns(string table)
     {
-        var connJson = HttpContext.Session.GetString("DbConnectionInfo");
+        var connJson = HttpContext.Session.GetString(SessionKeyDbConnectionInfo);
         if (string.IsNullOrEmpty(connJson)) return BadRequest(new { error = "No DB connection in session" });
         
         var info = JsonSerializer.Deserialize<DbConnectionInfo>(connJson);
@@ -369,7 +421,7 @@ public class DataController : ControllerBase
 
         var autoMapping = new ColumnMappingDto
         {
-            TimestampColumn = cols.FirstOrDefault(c => c.Contains("DATE", StringComparison.OrdinalIgnoreCase) || c.Contains("TIME", StringComparison.OrdinalIgnoreCase)) ?? "Timestamp",
+            TimestampColumn = cols.FirstOrDefault(c => c.Contains("DATE", StringComparison.OrdinalIgnoreCase) || c.Contains("TIME", StringComparison.OrdinalIgnoreCase)) ?? TimestampColumnName,
             SelectedColumns = cols.Where(c => 
                 c.StartsWith("FL", StringComparison.OrdinalIgnoreCase) || 
                 c.StartsWith("TEMP", StringComparison.OrdinalIgnoreCase) || 
@@ -385,9 +437,8 @@ public class DataController : ControllerBase
     {
         if (string.IsNullOrEmpty(table)) return null;
         
-        string tableName = table.Contains(".") ? table.Split('.').Last() : table;
+        string tableName = table.Contains('.') ? table.Split('.')[^1] : table;
         
-        // try-catch bloğunu tamamen kaldır veya içeriğini değiştir
         using var conn = new SqlConnection(info.ConnectionString);
         await conn.OpenAsync();
         
@@ -409,7 +460,7 @@ public class DataController : ControllerBase
     public class SeriesRequest
     {
         public string? Table { get; set; }
-        public string TimestampColumn { get; set; } = "Timestamp";
+        public string TimestampColumn { get; set; } = TimestampColumnName;
         public string[] Columns { get; set; } = Array.Empty<string>();
         public int Limit { get; set; } = 1200;
         public DateTime? From { get; set; }
@@ -424,7 +475,7 @@ public class DataController : ControllerBase
         {
             return Unauthorized(new { error = "Oturum süresi dolmuş veya giriş yapılmamış." });
         }
-        var connJson = HttpContext.Session.GetString("DbConnectionInfo");
+        var connJson = HttpContext.Session.GetString(SessionKeyDbConnectionInfo);
         if (string.IsNullOrEmpty(connJson)) return BadRequest(new { error = "Session'da bağlantı bilgisi bulunamadı." });
         
         var info = JsonSerializer.Deserialize<DbConnectionInfo>(connJson);
@@ -436,16 +487,20 @@ public class DataController : ControllerBase
 
         string connStr = info.ConnectionString;
         var table = req.Table ?? HttpContext.Session.GetString("SelectedTables")?.Trim('[', ']', '"') ?? "HIST_TREND";
-        var tsColRaw = req.TimestampColumn ?? "Timestamp";
-        var tsCol = tsColRaw;
-        var colsList = req.Columns;
+        var tsCol = req.TimestampColumn ?? TimestampColumnName;
 
         try
         {
             using var conn = new SqlConnection(connStr);
             await conn.OpenAsync();
 
-            var colsEscaped = req.Columns.Select(c => "[" + c + "]").ToArray();
+            // Parametrize table name validation - ensure no SQL injection
+            if (!IsValidTableName(table))
+            {
+                return BadRequest(new { error = "Geçersiz tablo adı." });
+            }
+
+            var colsEscaped = req.Columns.Select(c => "[" + EscapeSqlIdentifier(c) + "]").ToArray();
             var sql = $"SELECT TOP (@limit) [{tsCol}], {string.Join(", ", colsEscaped)} FROM {table} ORDER BY [{tsCol}] ASC";
             
             using var cmd = new SqlCommand(sql, conn);
@@ -473,5 +528,17 @@ public class DataController : ControllerBase
         }
     }
 
-    private static string EscapeIdentifier(string name) => name;
+    // --- Security helpers ---
+
+    private static bool IsValidTableName(string tableName)
+    {
+        // Tablo adı sadece harf, rakam, alt çizgi ve noktadan oluşmalıdır
+        return System.Text.RegularExpressions.Regex.IsMatch(tableName, @"^[a-zA-Z0-9_\.\[\]]+$");
+    }
+
+    private static string EscapeSqlIdentifier(string name)
+    {
+        // SQL enjeksiyonunu önlemek için köşeli parantez içindeki karakterleri temizle
+        return name.Replace("]", "]]");
+    }
 }
