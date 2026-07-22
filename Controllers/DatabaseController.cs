@@ -9,6 +9,12 @@ namespace StajWebProjesi.Controllers;
 [Route("[controller]/[action]")]
 public class DatabaseController : Controller
 {
+    private const string UnknownValue = "Bilinmeyen";
+    private const string SelectedTablesKey = "SelectedTables";
+    private const string DbConnectionInfoKey = "DbConnectionInfo";
+    private const string DbConnectionStringKey = "DbConnectionString";
+    private const string ColumnMappingsKey = "ColumnMappings";
+
     // Reusable JSON options to avoid creating new instances on every serialization
     private static readonly JsonSerializerOptions CaseInsensitiveJsonOptions = new()
     {
@@ -18,7 +24,7 @@ public class DatabaseController : Controller
     [HttpGet]
     public IActionResult GetConnectionStatus()
     {
-        var connectionInfo = HttpContext.Session.GetString("DbConnectionInfo");
+        var connectionInfo = HttpContext.Session.GetString(DbConnectionInfoKey);
         if (string.IsNullOrEmpty(connectionInfo))
         {
             return Json(new { connected = false });
@@ -30,14 +36,14 @@ public class DatabaseController : Controller
             string? dbName = model?.Database;
             if (string.IsNullOrWhiteSpace(dbName))
             {
-                var connStr = HttpContext.Session.GetString("DbConnectionString");
+                var connStr = HttpContext.Session.GetString(DbConnectionStringKey);
                 if (!string.IsNullOrEmpty(connStr))
                 {
                     var builder = new SqlConnectionStringBuilder(connStr);
-                    dbName = builder.InitialCatalog ?? "Bilinmeyen";
+                    dbName = builder.InitialCatalog ?? UnknownValue;
                 }
             }
-            return Json(new { connected = true, database = dbName ?? "Bilinmeyen" });
+            return Json(new { connected = true, database = dbName ?? UnknownValue });
         }
         catch
         {
@@ -88,11 +94,11 @@ public class DatabaseController : Controller
         {
             // Model'i serialize et
             var json = JsonSerializer.Serialize(model);
-            HttpContext.Session.SetString("DbConnectionInfo", json);
+            HttpContext.Session.SetString(DbConnectionInfoKey, json);
             
             // AYRICA gerçek connection string'i de kaydet (DataController.GetConnectionString kullanır)
             if (!string.IsNullOrEmpty(connStr))
-                HttpContext.Session.SetString("DbConnectionString", connStr);
+                HttpContext.Session.SetString(DbConnectionStringKey, connStr);
         }
         catch (Exception ex)
         {
@@ -109,10 +115,10 @@ public class DatabaseController : Controller
     [HttpPost]
     public IActionResult Disconnect()
     {
-        HttpContext.Session.Remove("DbConnectionInfo");
-        HttpContext.Session.Remove("DbConnectionString");
-        HttpContext.Session.Remove("SelectedTables");
-        HttpContext.Session.Remove("ColumnMappings");
+        HttpContext.Session.Remove(DbConnectionInfoKey);
+        HttpContext.Session.Remove(DbConnectionStringKey);
+        HttpContext.Session.Remove(SelectedTablesKey);
+        HttpContext.Session.Remove(ColumnMappingsKey);
         return Json(new { success = true });
     }
 
@@ -130,7 +136,7 @@ public class DatabaseController : Controller
         try
         {
             var json = JsonSerializer.Serialize(selectedTables ?? Array.Empty<string>());
-            HttpContext.Session.SetString("SelectedTables", json);
+            HttpContext.Session.SetString(SelectedTablesKey, json);
         }
         catch (Exception ex)
         {
@@ -155,7 +161,7 @@ public class DatabaseController : Controller
         try
         {
             var json = JsonSerializer.Serialize(selectedTables ?? Array.Empty<string>());
-            HttpContext.Session.SetString("SelectedTables", json);
+            HttpContext.Session.SetString(SelectedTablesKey, json);
         }
         catch (Exception ex)
         {
@@ -177,14 +183,14 @@ public class DatabaseController : Controller
         try
         {
             // read existing mappings using cached JSON options
-            var existingJson = HttpContext.Session.GetString("ColumnMappings");
+            var existingJson = HttpContext.Session.GetString(ColumnMappingsKey);
             var dict = string.IsNullOrEmpty(existingJson)
                 ? new Dictionary<string, ColumnMappingDto>(StringComparer.OrdinalIgnoreCase)
                 : JsonSerializer.Deserialize<Dictionary<string, ColumnMappingDto>>(existingJson, CaseInsensitiveJsonOptions) 
                   ?? new Dictionary<string, ColumnMappingDto>(StringComparer.OrdinalIgnoreCase);
 
             dict[mapping.Table] = mapping;
-            HttpContext.Session.SetString("ColumnMappings", JsonSerializer.Serialize(dict));
+            HttpContext.Session.SetString(ColumnMappingsKey, JsonSerializer.Serialize(dict));
             return Json(new { success = true });
         }
         catch (Exception ex)
@@ -222,11 +228,22 @@ public class DatabaseController : Controller
 
     private static void ValidateConnectionString(string connStr)
     {
+        if (string.IsNullOrWhiteSpace(connStr)) return;
+
         // Connection string injection prevention:
-        // Validate using SqlConnectionStringBuilder which sanitizes the input
+        // SqlConnectionStringBuilder helps parse but we should also ensure no dangerous keywords are added
         try
         {
-            _ = new SqlConnectionStringBuilder(connStr);
+            var builder = new SqlConnectionStringBuilder(connStr);
+            
+            // Check for potential injection patterns in keys
+            foreach (string key in builder.Keys)
+            {
+                if (key.Contains(";") || key.Contains("="))
+                {
+                    throw new InvalidOperationException("Bağlantı dizesi anahtarlarında geçersiz karakterler tespit edildi.");
+                }
+            }
         }
         catch (ArgumentException ex)
         {
@@ -240,8 +257,8 @@ public class DatabaseController : Controller
         if (string.IsNullOrWhiteSpace(dbName) && !string.IsNullOrEmpty(connStr))
         {
             var builder = new SqlConnectionStringBuilder(connStr);
-            dbName = builder.InitialCatalog ?? "Bilinmeyen";
+            dbName = builder.InitialCatalog ?? UnknownValue;
         }
-        return dbName ?? "Bilinmeyen";
+        return dbName ?? UnknownValue;
     }
 }

@@ -3,9 +3,9 @@
 {"dotnetenterprise.s4net.serverInfo.serverUrl":"https://sonarcloud.io"}
 {"dotnetenterprise.s4net.serverInfo.version":"8.0.0.97923"}
 {"dotnetenterprise.s4net.jre.bootstrapping":"Enabled"}
-{"dotnetenterprise.s4net.jre.download":"Downloaded"}
+{"dotnetenterprise.s4net.jre.download":"CacheHit"}
 {"dotnetenterprise.s4net.scannerEngine.bootstrapping":"Enabled"}
-{"dotnetenterprise.s4net.scannerEngine.download":"Downloaded"}
+{"dotnetenterprise.s4net.scannerEngine.download":"CacheHit"}
 {"dotnetenterprise.s4net.params.sonar_scm_disabled.source":"SQ_SERVER_SETTINGS"}
 {"dotnetenterprise.s4net.params.sonar_cpd_abap_minimumtokens.source":"SQ_SERVER_SETTINGS"}
 {"dotnetenterprise.s4net.params.sonar_cpd_abap_minimumlines.source":"SQ_SERVER_SETTINGS"}

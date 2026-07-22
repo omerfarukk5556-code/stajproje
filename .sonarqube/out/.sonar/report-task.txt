@@ -3,5 +3,5 @@ projectKey=stajproje
 serverUrl=https://sonarcloud.io
 serverVersion=8.0.0.97923
 dashboardUrl=https://sonarcloud.io/dashboard?id=stajproje
-ceTaskId=AZ-JfEfUe1yANY56068X
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZ-JfEfUe1yANY56068X
+ceTaskId=AZ-JncAf-KbrLBNRfcFH
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZ-JncAf-KbrLBNRfcFH

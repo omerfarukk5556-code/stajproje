@@ -97,9 +97,5 @@ C:\Users\omer\Desktop\staj proje\StajWebProjesi\Views\_ViewImports.cshtml
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\Views\_ViewStart.cshtml
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\Views\Shared\_Layout.cshtml.css
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\session_cache.db
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\session_cache.db-shm
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\session_cache.db-wal
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\stajweb.db
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\stajweb.db-shm
-C:\Users\omer\Desktop\staj proje\StajWebProjesi\stajweb.db-wal
 C:\Users\omer\Desktop\staj proje\StajWebProjesi\Properties\launchSettings.json

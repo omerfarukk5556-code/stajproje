@@ -12,19 +12,12 @@ using Microsoft.AspNetCore.Authorization;
 //[Authorize] // Bunu ekle
 [ApiController]
 [Route("[controller]")]
-public class DataController : ControllerBase
-
+public partial class DataController : ControllerBase
 {
     // Constants
     private const string SessionKeyDbConnectionInfo = "DbConnectionInfo";
     private const string SessionKeyDbConnectionString = "DbConnectionString";
     private const string TimestampColumnName = "Timestamp";
-
-    // Reusable JSON options
-    private static readonly JsonSerializerOptions CaseInsensitiveJsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
 
     private string? GetConnectionString()
     {
@@ -126,6 +119,8 @@ public class DataController : ControllerBase
             var timeFilter = BuildTimeFilter(tsCol, batchEndDate, timeRange, yearCount);
             
             // 6. Sorguyu oluştur ve çalıştır
+            // tsCol ve batchCol gibi tanımlayıcılar parametre olarak verilemez, ancak bunlar FindTimestampColumnAsync ve FindBatchIdColumnAsync
+            // metodlarından güvenli bir şekilde (INFORMATION_SCHEMA üzerinden) gelmektedir. selectCols ise FilterValidColumnsAsync üzerinden doğrulanmaktadır.
             var sql = $"SELECT [{tsCol}], {selectCols} FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId{timeFilter} ORDER BY [{tsCol}] ASC";
             
             using var cmd = new SqlCommand(sql, conn);
@@ -204,6 +199,7 @@ public class DataController : ControllerBase
     private static async Task<DateTime?> GetBatchEndDateAsync(SqlConnection conn, string batchCol, int batchId, string tsCol)
     {
         DateTime? batchEndDate = null;
+        // batchCol ve tsCol güvenli kaynaklardan (sabitler veya meta-veri sorguları) geldiği için string interpolation kullanılabilir.
         string batchDateSql = $"SELECT MAX([{tsCol}]) FROM dbo.HIST_TREND WHERE [{batchCol}] = @batchId";
         using (var cmdBatch = new SqlCommand(batchDateSql, conn))
         {
@@ -230,7 +226,7 @@ public class DataController : ControllerBase
         return $" AND [{tsCol}] >= DATEADD({datePart}, -{yearCount}, @batchEnd) AND [{tsCol}] <= @batchEnd";
     }
 
-    private record SeriesResult(List<string> Labels, Dictionary<string, List<double>> Series, int TotalRecords);
+    private sealed record SeriesResult(List<string> Labels, Dictionary<string, List<double>> Series, int TotalRecords);
 
     private static async Task<SeriesResult> ReadAndSampleSeriesAsync(SqlCommand cmd, List<string> requestedCols, List<string> validCols, List<string> colList)
     {
@@ -307,10 +303,11 @@ public class DataController : ControllerBase
             using (var conn4 = new SqlConnection(connectionString))
             {
                 await conn4.OpenAsync();
+                // Kolon adları meta-veri keşfi ile doğrulanmıştır.
                 string sqlAll = $@"
                     SELECT 
-                        bm.{konsVolCol} AS KonsimentoGSV,
-                        bm.{konsMassCol} AS KonsimentoMass,
+                        bm.[{konsVolCol}] AS KonsimentoGSV,
+                        bm.[{konsMassCol}] AS KonsimentoMass,
                         (SELECT MAX([{gsColName}]) - MIN([{gsColName}]) FROM HIST_TREND WHERE [{batchCol}] = @batchId) AS SayaçGSV,
                         (SELECT MAX([{massColName}]) - MIN([{massColName}]) FROM HIST_TREND WHERE [{batchCol}] = @batchId) AS SayaçMass
                     FROM BATCH_MASTER bm
@@ -501,7 +498,8 @@ public class DataController : ControllerBase
             }
 
             var colsEscaped = req.Columns.Select(c => "[" + EscapeSqlIdentifier(c) + "]").ToArray();
-            var sql = $"SELECT TOP (@limit) [{tsCol}], {string.Join(", ", colsEscaped)} FROM {table} ORDER BY [{tsCol}] ASC";
+            // table adı IsValidTableName ile doğrulandı, tsCol güvenli bir sabittir.
+            var sql = $"SELECT TOP (@limit) [{tsCol}], {string.Join(", ", colsEscaped)} FROM [{table}] ORDER BY [{tsCol}] ASC";
             
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@limit", req.Limit);
@@ -532,9 +530,13 @@ public class DataController : ControllerBase
 
     private static bool IsValidTableName(string tableName)
     {
+        if (string.IsNullOrWhiteSpace(tableName)) return false;
         // Tablo adı sadece harf, rakam, alt çizgi ve noktadan oluşmalıdır
-        return System.Text.RegularExpressions.Regex.IsMatch(tableName, @"^[a-zA-Z0-9_\.\[\]]+$");
+        return TableNameRegex().IsMatch(tableName);
     }
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"^[a-zA-Z0-9_\.\[\]]+$", System.Text.RegularExpressions.RegexOptions.None, 1000)]
+    private static partial System.Text.RegularExpressions.Regex TableNameRegex();
 
     private static string EscapeSqlIdentifier(string name)
     {

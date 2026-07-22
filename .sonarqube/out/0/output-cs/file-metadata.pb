@@ -1,15 +1,15 @@
 ß
 ÓC:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\Microsoft.AspNetCore.App.SourceGenerators\Microsoft.AspNetCore.SourceGenerators.PublicProgramSourceGenerator\PublicTopLevelProgram.Generated.g.csutf-8p
 eC:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.RazorAssemblyInfo.csutf-8k
-`C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.AssemblyInfo.csutf-8C
-:C:\Users\omer\Desktop\staj proje\StajWebProjesi\Program.csutf-8|
-qC:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\.NETCoreApp,Version=v10.0.AssemblyAttributes.csutf-8m
-bC:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.GlobalUsings.g.csutf-8Z
-QC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\BatchSelectionViewModel.csutf-8G
->C:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\User.csutf-8S
+`C:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.AssemblyInfo.csutf-8m
+bC:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\StajWebProjesi.GlobalUsings.g.csutf-8|
+qC:\Users\omer\Desktop\staj proje\StajWebProjesi\obj\Debug\net10.0\.NETCoreApp,Version=v10.0.AssemblyAttributes.csutf-8C
+:C:\Users\omer\Desktop\staj proje\StajWebProjesi\Program.csutf-8G
+>C:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\User.csutf-8Q
+HC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\ErrorViewModel.csutf-8S
 JC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\DbConnectionInfo.csutf-8S
-JC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\ColumnMappingDto.csutf-8Q
-HC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\ErrorViewModel.csutf-8V
+JC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\ColumnMappingDto.csutf-8Z
+QC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\BatchSelectionViewModel.csutf-8V
 MC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\AppDbContextFactory.csutf-8O
 FC:\Users\omer\Desktop\staj proje\StajWebProjesi\Models\AppDbContext.csutf-8b
 WC:\Users\omer\Desktop\staj proje\StajWebProjesi\Migrations\AppDbContextModelSnapshot.csutf-8t

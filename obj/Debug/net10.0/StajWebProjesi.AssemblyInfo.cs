@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StajWebProjesi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54bcbb6006b981453aa793daa1e9c62490fccfb0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2efbb5a723edfe98d8918b208326e910ee48990f")]
 [assembly: System.Reflection.AssemblyProductAttribute("StajWebProjesi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StajWebProjesi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

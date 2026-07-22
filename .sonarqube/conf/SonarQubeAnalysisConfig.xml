@@ -60,7 +60,7 @@
     <Property Name="rp.entitlements.api.enabled">true</Property>
     <Property Name="sonar.project.monorepo.enabled">false</Property>
     <Property Name="sonar.pullrequest.github.summary_comment">true</Property>
-    <Property Name="sonar.autoscan.enabled">true</Property>
+    <Property Name="sonar.autoscan.enabled">false</Property>
     <Property Name="sonar.abap.file.suffixes">.abap,.ab4,.flow,.asprog</Property>
     <Property Name="sonar.cpd.abap.minimumTokens">100</Property>
     <Property Name="sonar.cpd.abap.minimumLines">20</Property>
